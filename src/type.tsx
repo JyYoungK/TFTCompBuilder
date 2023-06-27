@@ -1,6 +1,7 @@
 export interface ChampionDetails {
   name: string;
   item: string[];
+  imageUrl: string;
 }
 
 export interface Season9TeamComp {

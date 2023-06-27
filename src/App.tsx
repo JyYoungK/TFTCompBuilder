@@ -15,12 +15,11 @@ const App: React.FC = () => {
     []
   );
 
-  const getMatchedTeamComps = (champions: string[]): Season9TeamComp[] => {
+  const getMatchedTeamComps = (championName: string): Season9TeamComp[] => {
+    const lowercasedChampionName = championName.toLowerCase();
     const matchedComps: Season9TeamComp[] = season9TeamCompData.filter((comp) =>
-      champions.every((champion) =>
-        comp.champions.some(
-          (c) => c.name.toLowerCase() === champion.toLowerCase()
-        )
+      comp.champions.some((champion) =>
+        champion.name.toLowerCase().includes(lowercasedChampionName)
       )
     );
     return matchedComps;
@@ -36,8 +35,8 @@ const App: React.FC = () => {
     );
 
     // Set the recommended champions
-    setRecommendedChampions(filteredChampions.slice(0, 5)); // Show up to 2 recommended champions
-    setMatchedTeamComps(getMatchedTeamComps(filteredChampions));
+    setRecommendedChampions(filteredChampions.slice(0, 5)); // Show up to 5 recommended champions
+    setMatchedTeamComps(getMatchedTeamComps(value)); // Update matched team comps based on search term
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -61,10 +60,10 @@ const App: React.FC = () => {
   const handleRemoveChampion = (champion: string) => {
     const updatedChampions = selectedChampions.filter((c) => c !== champion);
     setSelectedChampions(updatedChampions);
-    if (recommendedChampions.length === 0) {
-      setMatchedTeamComps([]);
+    if (updatedChampions.length === 0) {
+      setMatchedTeamComps([]); // Clear matched team comps if no champions selected
     } else {
-      setMatchedTeamComps(getMatchedTeamComps(updatedChampions));
+      setMatchedTeamComps(getMatchedTeamComps(searchTerm)); // Update matched team comps based on remaining selected champions
     }
   };
 
@@ -77,12 +76,16 @@ const App: React.FC = () => {
           onChange={handleSearch}
           onKeyDown={handleKeyDown}
           placeholder="Enter champion name"
+          className="p-2 border-black border-2"
         />
-        <button onClick={() => handleAddChampion(recommendedChampions[0])}>
+        <button
+          className="ml-2 text-green-50 bg-green-500 p-2 rounded-lg"
+          onClick={() => handleAddChampion(recommendedChampions[0])}
+        >
           Add
         </button>
       </div>
-      <div>
+      <div className="mt-1 space-x-2">
         {selectedChampions.map((champion) => (
           <span
             key={champion}
@@ -105,17 +108,23 @@ const App: React.FC = () => {
       <div>
         {matchedTeamComps.map((comp) => (
           <div key={comp.name} className="flex flex-col mt-5">
-            <div className="flex flex-row space-x-2 justify-center">
-              <h2>{comp.name}</h2>
-              <p>Tier: {comp.tier}</p>
-              <p>Speed: {comp.speed}</p>
-              <p>Win: {comp.win}</p>
+            <div className="flex flex-row space-x-2 justify-between mb-2 font-black text-2xl">
+              <h2 className="">{comp.name}</h2>
+              {/* <p>Tier: {comp.tier}</p> */}
+              <p>{comp.speed}</p>
+              {/* <p>Win: {comp.win}</p>
               <p>Loss: {comp.loss}</p>
-              <p>Win Rate: {comp.win / (comp.win + comp.loss)}</p>
+              <p>Win Rate: {comp.win / (comp.win + comp.loss)}</p> */}
             </div>
             <ul className="flex flex-row space-x-2 justify-center">
               {comp.champions.map((champion) => (
-                <li key={champion.name}>{champion.name}</li>
+                // <li key={champion.name}>{champion.name}</li>
+                <img
+                  className="w-16 h-16"
+                  key={champion.name}
+                  src={champion.imageUrl}
+                  alt={champion.name}
+                />
               ))}
             </ul>
           </div>
