@@ -494,6 +494,32 @@ export const season9TeamCompData: Season9TeamComp[] = [
     ],
   },
   {
+    name: "Noxus 3",
+    tier: "A",
+    speed: "Mid",
+    position: "jpg location",
+    win: 2,
+    loss: 0,
+    champions: [
+      {
+        name: "Cassiopeia",
+        item: [],
+        imageUrl: "/public/champions/Cassiopeia.png",
+      },
+      { name: "Swain", item: [], imageUrl: "/public/champions/Swain.png" },
+      { name: "Kled", item: [], imageUrl: "/public/champions/Kled.png" },
+      {
+        name: "Katarina",
+        item: [],
+        imageUrl: "/public/champions/Katarina.png",
+      },
+      { name: "Darius", item: [], imageUrl: "/public/champions/Darius.png" },
+      { name: "Azir", item: [], imageUrl: "/public/champions/Azir.png" },
+      { name: "Nasus", item: [], imageUrl: "/public/champions/Nasus.png" },
+      { name: "Sion", item: [], imageUrl: "/public/champions/Sion.png" },
+    ],
+  },
+  {
     name: "Rogue",
     tier: "A",
     speed: "Early",
@@ -526,6 +552,11 @@ export const season9TeamCompData: Season9TeamComp[] = [
       { name: "Ashe", item: [], imageUrl: "/public/champions/Ashe.png" },
       { name: "Zed", item: [], imageUrl: "/public/champions/Zed.png" },
       { name: "Warwick", item: [], imageUrl: "/public/champions/Warwick.png" },
+      {
+        name: "Lissandra",
+        item: [],
+        imageUrl: "/public/champions/Lissandra.png",
+      },
       { name: "Ekko", item: [], imageUrl: "/public/champions/Ekko.png" },
       {
         name: "Katarina",
