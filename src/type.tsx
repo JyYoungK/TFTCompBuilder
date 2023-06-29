@@ -1,7 +1,6 @@
 export interface ChampionDetails {
   name: string;
   item: string[];
-  imageUrl: string;
 }
 
 export interface Season9TeamComp {
@@ -13,3 +12,11 @@ export interface Season9TeamComp {
   loss: number;
   champions: ChampionDetails[];
 }
+
+type SortOrder = { [key: string]: number };
+
+export const sortOrder: SortOrder = {
+  "Roll at 6 (Early Game Comp)": 1,
+  "Roll at 7 (Mid Game Comp)": 2,
+  "Roll at 8 (Late Game Comp)": 3,
+};
