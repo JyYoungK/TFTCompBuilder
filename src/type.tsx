@@ -20,3 +20,19 @@ export const sortOrder: SortOrder = {
   "Roll at 7 (Mid Game Comp)": 2,
   "Roll at 8 (Late Game Comp)": 3,
 };
+
+export interface Item {
+  itemName: string;
+  count: number;
+  place: number;
+}
+
+export interface ItemCategory {
+  categoryName: string;
+  items: Item[];
+}
+
+export interface ItemCategoryRow {
+  rowName: string;
+  categories: ItemCategory[];
+}

@@ -87,6 +87,33 @@ export const season9TeamCompData: Season9TeamComp[] = [
     ],
   },
   {
+    name: "Warwick Juggernaut",
+    tier: "S",
+    speed: "Roll at 6 (Early Game Comp)",
+    position: "jpg location",
+    win: 0,
+    loss: 0,
+    champions: [
+      { name: "Irelia", item: [] },
+      { name: "Samira", item: [] },
+      {
+        name: "Warwick",
+        item: ["GuinsoosRageblade", "Bloodthirster", "Quicksilver"],
+      },
+      {
+        name: "Garen",
+        item: [],
+      },
+      { name: "Darius", item: [] },
+      { name: "Kaisa", item: ["ArchangelsStaff", "StatikkShiv"] },
+      {
+        name: "Yasuo",
+        item: ["JuggernautEmblem"],
+      },
+      { name: "Aatrox", item: [] },
+    ],
+  },
+  {
     name: "Ionian Challengers",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
@@ -131,6 +158,36 @@ export const season9TeamCompData: Season9TeamComp[] = [
       {
         name: "Gwen",
         item: ["HextechGunblade", "BlueBuff", "JeweledGauntlet"],
+      },
+    ],
+  },
+  {
+    name: "Shadow Yasuo",
+    tier: "S",
+    speed: "Roll at 7 (Mid Game Comp)",
+    position: "jpg location",
+    win: 0,
+    loss: 0,
+    champions: [
+      { name: "Irelia", item: [] },
+      { name: "Maokai", item: [] },
+      {
+        name: "Kalista",
+        item: ["JeweledGauntlet", "GuinsoosRageblade", "ArchangelsStaff"],
+      },
+      {
+        name: "Gwen",
+        item: [],
+      },
+      { name: "Kaisa", item: ["ZekesHerald", "ZekesHerald"] },
+      { name: "Shen", item: [] },
+      {
+        name: "Yasuo",
+        item: ["Bloodthirster", "TitansResolve", "ShadowisleEmblem"],
+      },
+      {
+        name: "Ryze",
+        item: [],
       },
     ],
   },
@@ -425,7 +482,34 @@ export const season9TeamCompData: Season9TeamComp[] = [
     ],
   },
   {
-    name: "Shurima",
+    name: "Shurima + Sorcerer",
+    tier: "B",
+    speed: "Roll at 8 (Late Game Comp)",
+    position: "jpg location",
+    win: 0,
+    loss: 0,
+    champions: [
+      {
+        name: "Teemo",
+        item: [],
+      },
+      {
+        name: "Swain",
+        item: [],
+      },
+      { name: "Garen", item: [] },
+      { name: "Lux", item: [] },
+      {
+        name: "Azir",
+        item: ["Guardbreaker", "StatikkShiv", "JeweledGauntlet"],
+      },
+      { name: "Jarvan", item: [] },
+      { name: "Nasus", item: ["Redemption", "SunfireCape", "WarmogsArmor"] },
+      { name: "KSante", item: [] },
+    ],
+  },
+  {
+    name: "6 Shurima",
     tier: "B",
     speed: "Roll at 7 (Mid Game Comp)",
     position: "jpg location",
