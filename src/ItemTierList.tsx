@@ -135,7 +135,7 @@ function ItemTierList() {
               <h3 className="flex justify-start pl-2">
                 {category.categoryName}
               </h3>
-              <ul className="grid 2xl:grid-cols-10 grid-cols-5">
+              <ul className="grid 2xl:grid-cols-9 grid-cols-5">
                 {category.items.map((item: Item) => (
                   <li key={item.itemName} className="p-2">
                     <img
