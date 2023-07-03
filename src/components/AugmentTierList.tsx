@@ -54,24 +54,40 @@ function AugmentTierList() {
   const topAugments = getTopAugments(augmentUnits);
 
   const getImageUrl = (itemName: string) => {
-    console.log(itemName);
     return `https://cdn.metatft.com/file/metatft/champions/${itemName.toLowerCase()}.png`;
   };
 
+  function transformAugmentName(augment: string): string {
+    // Remove 'TFT9_' from the beginning
+    let transformedName = augment.replace("TFT9_Augment_", "");
+
+    // Replace '_' with space
+    transformedName = transformedName.replace(/_/g, " ");
+
+    // Insert space before capital letters after small case
+    transformedName = transformedName.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+    transformedName = transformedName.replace(/(\d+)$/, " $1");
+
+    return transformedName;
+  }
+
   return (
-    <div className="w-2/6 h-full ml-4 bg-amber-950 p-4">
-      <h1 className="mb-8 text-3xl underline font-black text-blue-300">
+    <div className="w-2/6 h-full ml-4 bg-amber-950 p-4 border-4 border-red-500">
+      <h1 className="mb-8 text-3xl underline font-black text-red-300">
         Top Augments
       </h1>
       <ul>
         {topAugments.map(
           (augment, index) =>
             augment.units.length > 5 && (
-              <li key={index} className="text-xl text-white">
-                <strong>Augment:</strong> {augment.augment}
-                <br />
+              <li key={index} className="text-2xl text-white ">
+                <div className="mb-2">
+                  <strong>Augment:</strong>{" "}
+                  {transformAugmentName(augment.augment)}
+                </div>
                 <div className="grid 2xl:grid-cols-9 grid-cols-5">
-                  {augment.units.map((championUrl) => (
+                  {augment.units.slice(0, 9).map((championUrl) => (
                     <img
                       key={championUrl}
                       src={getImageUrl(championUrl)}

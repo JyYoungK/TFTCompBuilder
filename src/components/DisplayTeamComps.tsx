@@ -23,11 +23,11 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
         <div
           key={comp.name}
           className={`flex flex-col  ${
-            comp.speed === "Roll at 6 (Early Game Comp)"
+            comp.speed === "(Early Game Comp)"
               ? "bg-gradient-to-r from-green-300 to-green-200"
-              : comp.speed === "Roll at 7 (Mid Game Comp)"
+              : comp.speed === "(Mid Game Comp)"
               ? "bg-gradient-to-r from-blue-300 to-blue-200"
-              : comp.speed === "Roll at 8 (Late Game Comp)"
+              : comp.speed === "(Late Game Comp)"
               ? "bg-gradient-to-r from-purple-300 to-purple-200"
               : ""
           } p-4`}
@@ -35,7 +35,7 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
           <div className="flex flex-row space-x-2 mb-2 font-black text-2xl">
             <h2 className="">{comp.name}</h2>
             {/* <p>Tier: {comp.tier}</p> */}
-            <p> [{comp.speed}]</p>
+            <p> {comp.speed}</p>
             {/* <p>Win: {comp.win}</p>
         <p>Loss: {comp.loss}</p>
         <p>Win Rate: {comp.win / (comp.win + comp.loss)}</p> */}
