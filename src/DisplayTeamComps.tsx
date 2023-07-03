@@ -24,11 +24,11 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
           key={comp.name}
           className={`flex flex-col mt-5 ${
             comp.speed === "Roll at 6 (Early Game Comp)"
-              ? "bg-gradient-to-r from-green-300 to-green-700"
+              ? "bg-gradient-to-r from-green-300 to-green-200"
               : comp.speed === "Roll at 7 (Mid Game Comp)"
-              ? "bg-gradient-to-r from-blue-300 to-blue-700"
+              ? "bg-gradient-to-r from-blue-300 to-blue-200"
               : comp.speed === "Roll at 8 (Late Game Comp)"
-              ? "bg-gradient-to-r from-purple-300 to-purple-700"
+              ? "bg-gradient-to-r from-purple-300 to-purple-200"
               : ""
           } p-4`}
         >
@@ -40,14 +40,12 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
         <p>Loss: {comp.loss}</p>
         <p>Win Rate: {comp.win / (comp.win + comp.loss)}</p> */}
           </div>
-          <div className="flex flex-row justify-center">
+          <div className="flex flex-row justify-center space-x-1 ">
             {comp.champions.map((champion) => {
               const { name } = champion;
               const championData = season9ChampionList.find(
                 (champ) => champ.name === name
               );
-
-              console.log(championData);
 
               let borderColorClass = "";
               switch (championData?.cost) {
@@ -69,11 +67,10 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
                 default:
                   borderColorClass = "";
               }
-              console.log(borderColorClass);
               return (
-                <div key={name} className={`relative `}>
+                <div key={name} className={`relative`}>
                   <img
-                    className={`w-20 h-20 ${borderColorClass} border-2`}
+                    className={`w-20 h-20 ${borderColorClass} border-4 `}
                     src={`/champions/${name}.png`}
                     alt={name}
                   />

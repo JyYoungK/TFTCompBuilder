@@ -16,18 +16,22 @@ function ItemTierList() {
         const normalItems: Item[] = [];
         const radiantItems: Item[] = [];
         const ornnItems: Item[] = [];
+        const heimerUpgrade: Item[] = [];
 
         console.log(data);
 
         data.results.slice(0, 140).forEach((item: Item) => {
           if (
             item.hasOwnProperty("itemName") &&
-            !item.itemName.includes("Emblem")
+            !item.itemName.includes("Emblem") &&
+            !item.itemName.includes("Piltover")
           ) {
             if (item.itemName.includes("Radiant")) {
               radiantItems.push(item);
             } else if (item.itemName.includes("Ornn")) {
               ornnItems.push(item);
+            } else if (item.itemName.includes("HeimerUpgrade")) {
+              heimerUpgrade.push(item);
             } else {
               normalItems.push(item);
             }
@@ -59,6 +63,10 @@ function ItemTierList() {
                 items: normalItems.slice(
                   2 * Math.floor(normalItems.length / 3)
                 ),
+              },
+              {
+                categoryName: "Heimer Upgrade",
+                items: heimerUpgrade,
               },
             ],
           },
