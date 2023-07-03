@@ -40,11 +40,16 @@ const Navbar: React.FC<NavbarProps> = ({
 
     // Filter the champion list based on the search term
     const filteredChampions = season9ChampionList.filter((champion) =>
-      champion.toLowerCase().startsWith(value.toLowerCase())
+      champion.name.toLowerCase().startsWith(value.toLowerCase())
     );
 
+    // Convert filtered champions to an array of strings
+    const recommendedChampions = filteredChampions
+      .slice(0, 5)
+      .map((champion) => champion.name);
+
     // Set the recommended champions
-    setRecommendedChampions(filteredChampions.slice(0, 5)); // Show up to 5 recommended champions
+    setRecommendedChampions(recommendedChampions); // Show up to 5 recommended champions
     setMatchedTeamComps(getMatchedTeamComps(selectedChampions)); // Update matched team comps based on search term
     setSelectedFromDropdown(false);
   };
