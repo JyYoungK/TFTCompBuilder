@@ -17,8 +17,13 @@ function ItemTierList() {
         const radiantItems: Item[] = [];
         const ornnItems: Item[] = [];
 
+        console.log(data);
+
         data.results.slice(0, 140).forEach((item: Item) => {
-          if (item.hasOwnProperty("itemName")) {
+          if (
+            item.hasOwnProperty("itemName") &&
+            !item.itemName.includes("Emblem")
+          ) {
             if (item.itemName.includes("Radiant")) {
               radiantItems.push(item);
             } else if (item.itemName.includes("Ornn")) {
@@ -30,6 +35,7 @@ function ItemTierList() {
         });
 
         normalItems.sort((a, b) => b.place - a.place);
+        normalItems.splice(-10); // Remove the unnecessray last 10 items
         radiantItems.sort((a, b) => b.place - a.place);
         ornnItems.sort((a, b) => b.place - a.place);
 
