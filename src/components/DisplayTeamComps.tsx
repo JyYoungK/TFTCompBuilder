@@ -1,6 +1,6 @@
 import React from "react";
-import { sortOrder, Season9TeamComp } from "./type";
-import { season9ChampionList } from "./season9Comp";
+import { sortOrder, Season9TeamComp } from "../type";
+import { season9ChampionList } from "../season9/season9Comp";
 
 interface DisplayTeamCompsProps {
   matchedTeamComps: Season9TeamComp[];
@@ -18,11 +18,11 @@ const DisplayTeamComps: React.FC<DisplayTeamCompsProps> = ({
     });
 
   return (
-    <div className="w-4/6">
+    <div className="w-2/6">
       {sortedMatchedTeamComps.map((comp) => (
         <div
           key={comp.name}
-          className={`flex flex-col mt-5 ${
+          className={`flex flex-col  ${
             comp.speed === "Roll at 6 (Early Game Comp)"
               ? "bg-gradient-to-r from-green-300 to-green-200"
               : comp.speed === "Roll at 7 (Mid Game Comp)"

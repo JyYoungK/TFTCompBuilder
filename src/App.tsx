@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Season9TeamComp } from "./type";
 import "./App.css";
-import Navbar from "./Navbar";
-import ItemTierList from "./ItemTierList";
-import DisplayTeamComps from "./DisplayTeamComps";
+import Navbar from "./components/Navbar";
+import ItemTierList from "./components/ItemTierList";
+import AugmentTierList from "./components/AugmentTierList";
+import DisplayTeamComps from "./components/DisplayTeamComps";
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -52,8 +53,9 @@ const App: React.FC = () => {
         setSelectedFromDropdown={setSelectedFromDropdown}
         searchInputRef={searchInputRef}
       />
-      <div className="flex flex-row">
+      <div className="flex flex-row mt-5">
         <DisplayTeamComps matchedTeamComps={matchedTeamComps} />
+        <AugmentTierList />
         <ItemTierList />
       </div>
     </div>

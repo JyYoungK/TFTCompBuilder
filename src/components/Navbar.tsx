@@ -1,6 +1,9 @@
 import { useState, ChangeEvent, KeyboardEvent } from "react";
-import { season9TeamCompData, season9ChampionList } from "./season9Comp";
-import { Season9TeamComp } from "./type";
+import {
+  season9TeamCompData,
+  season9ChampionList,
+} from "../season9/season9Comp";
+import { Season9TeamComp } from "../type";
 
 interface NavbarProps {
   searchTerm: string;

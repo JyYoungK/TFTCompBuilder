@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Item, ItemCategory, ItemCategoryRow } from "./type";
+import { Item, ItemCategory, ItemCategoryRow } from "../type";
 
 function ItemTierList() {
   const [itemCategoryRows, setItemCategoryRows] = useState<ItemCategoryRow[]>(
@@ -131,7 +131,7 @@ function ItemTierList() {
   };
 
   return (
-    <div className="ml-4 bg-amber-950 mt-5 w-2/6 h-full">
+    <div className="ml-4 w-2/6 h-full">
       {itemCategoryRows.map((row: ItemCategoryRow) => (
         <div
           key={row.rowName}

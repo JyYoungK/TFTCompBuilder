@@ -1,4 +1,4 @@
-import { Season9TeamComp } from "./type";
+import { Season9TeamComp } from "../type";
 
 export const season9ChampionList = [
   { name: "Aatrox", cost: 5 },
@@ -34,6 +34,7 @@ export const season9ChampionList = [
   { name: "Malzahar", cost: 1 },
   { name: "Maokai", cost: 1 },
   { name: "Nasus", cost: 4 },
+  { name: "Orianna", cost: 1 },
   { name: "Poppy", cost: 1 },
   { name: "Renekton", cost: 1 },
   { name: "RekSai", cost: 3 },
@@ -66,7 +67,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Challengers",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -90,7 +92,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Warwick Juggernaut",
     tier: "S",
     speed: "Roll at 6 (Early Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [""],
     win: 0,
     loss: 0,
     champions: [
@@ -114,10 +117,11 @@ export const season9TeamCompData: Season9TeamComp[] = [
     ],
   },
   {
-    name: "Ionian Challengers",
+    name: "4 Challengers + 6 Ionia",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -141,7 +145,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Challengers + Shadow",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -165,7 +170,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Shadow Yasuo",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -195,7 +201,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Void",
     tier: "S",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -228,7 +235,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "6 Ionia",
     tier: "A",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 1,
     loss: 1,
     champions: [
@@ -255,7 +263,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Invokers",
     tier: "B",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 2,
     loss: 2,
     champions: [
@@ -279,7 +288,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "DeadEye",
     tier: "S",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -306,7 +316,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Zeri",
     tier: "S",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 0,
     loss: 2,
     champions: [
@@ -333,7 +344,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Yordle Gunner",
     tier: "S",
     speed: "Roll at 6 (Early Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 3,
     loss: 0,
     champions: [
@@ -360,7 +372,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "5 Yordles",
     tier: "A",
     speed: "Roll at 6 (Early Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -387,7 +400,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Shadow Isle",
     tier: "A",
     speed: "Roll at 6 (Early Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -413,7 +427,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Shadow Isle 2",
     tier: "A",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -437,7 +452,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Multicaster",
     tier: "S",
     speed: "Roll at 6 (Early Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -461,7 +477,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Strategist",
     tier: "B",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -485,7 +502,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Shurima + Sorcerer",
     tier: "B",
     speed: "Roll at 8 (Late Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -512,7 +530,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "6 Shurima",
     tier: "B",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -539,7 +558,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "6 Sorcerers",
     tier: "A",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -560,7 +580,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "8 Sorcerers",
     tier: "A",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "July 1st, 2023",
+    augments: [],
     win: 0,
     loss: 0,
     champions: [
@@ -584,7 +605,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Garen Reroll",
     tier: "A",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -602,7 +624,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "6 Noxus",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -629,7 +652,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Noxus + Shurima",
     tier: "A",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -656,7 +680,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Rogue Slayers",
     tier: "A",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [
@@ -677,7 +702,8 @@ export const season9TeamCompData: Season9TeamComp[] = [
     name: "Ekko",
     tier: "S",
     speed: "Roll at 7 (Mid Game Comp)",
-    position: "jpg location",
+    date: "June 15th, 2023",
+    augments: [],
     win: 2,
     loss: 0,
     champions: [

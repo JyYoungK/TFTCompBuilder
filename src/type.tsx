@@ -7,7 +7,8 @@ export interface Season9TeamComp {
   name: string;
   tier: string;
   speed: string;
-  position: string;
+  date: string;
+  augments: string[];
   win: number;
   loss: number;
   champions: ChampionDetails[];
@@ -36,3 +37,20 @@ export interface ItemCategoryRow {
   rowName: string;
   categories: ItemCategory[];
 }
+
+export type AugmentData = {
+  augment: string;
+  unit: string;
+  places: {
+    avg_place: number;
+    count: number;
+    avg_place_change: number;
+    unit_count: number;
+  };
+};
+
+export type AugmentUnit = {
+  augment: string;
+  units: string[];
+  avgPlace: number;
+};
