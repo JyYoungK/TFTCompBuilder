@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, KeyboardEvent } from "react";
 import {
-  season9TeamCompData,
+  season9LateGameTeamCompData,
   season9ChampionList,
 } from "../season9/season9Comp";
 import { Season9TeamComp } from "../type";
@@ -29,10 +29,11 @@ const Navbar: React.FC<NavbarProps> = ({
   const getMatchedTeamComps = (
     selectedChampions: string[]
   ): Season9TeamComp[] => {
-    const matchedComps: Season9TeamComp[] = season9TeamCompData.filter((comp) =>
-      selectedChampions.every((champion) =>
-        comp.champions.some((c) => c.name === champion)
-      )
+    const matchedComps: Season9TeamComp[] = season9LateGameTeamCompData.filter(
+      (comp) =>
+        selectedChampions.every((champion) =>
+          comp.champions.some((c) => c.name === champion)
+        )
     );
     return matchedComps;
   };
@@ -94,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div>
       <div className="absolute right-8 top-5 flex flex-row items-center">
-        <div className="text-3xl mr-4 font-bold"> SEASON 9 TFT BUILD GUIDE</div>
+        <div className="text-3xl mr-4 font-bold"> SEASON 9 TFT CHEAT SHEET</div>
         <img src="/icons/Penguin.png" className="w-16 h-16 "></img>
       </div>
       <div className="flex flex-row text-center items-center">
