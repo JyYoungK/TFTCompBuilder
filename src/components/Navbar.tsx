@@ -35,35 +35,31 @@ const Navbar: React.FC<NavbarProps> = ({
   //   return matchedComps;
   // };
 
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchTerm(value);
+  // const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = event.target;
+  //   setSearchTerm(value);
 
-    // Filter the champion list based on the search term
-    const filteredChampions = season9ChampionList.filter((champion) =>
-      champion.name.toLowerCase().startsWith(value.toLowerCase())
-    );
+  //   const filteredChampions = season9ChampionList.filter((champion) =>
+  //     champion.name.toLowerCase().startsWith(value.toLowerCase())
+  //   );
 
-    // Convert filtered champions to an array of strings
-    const recommendedChampions = filteredChampions
-      .slice(0, 5)
-      .map((champion) => champion.name);
+  //   const recommendedChampions = filteredChampions
+  //     .slice(0, 5)
+  //     .map((champion) => champion.name);
 
-    // Set the recommended champions
-    setRecommendedChampions(recommendedChampions); // Show up to 5 recommended champions
-    // setMatchedTeamComps(getMatchedTeamComps(selectedChampions)); // Update matched team comps based on search term
-    setSelectedFromDropdown(false);
-  };
+  //   setRecommendedChampions(recommendedChampions); // Show up to 5 recommended champions
+  //   setSelectedFromDropdown(false);
+  // };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevent form submission
+  // const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault(); // Prevent form submission
 
-      if (recommendedChampions.length > 0) {
-        handleAddChampion(recommendedChampions[0]);
-      }
-    }
-  };
+  //     if (recommendedChampions.length > 0) {
+  //       handleAddChampion(recommendedChampions[0]);
+  //     }
+  //   }
+  // };
 
   const handleAddChampion = (champion: string) => {
     if (selectedChampions.length < MAX_CHAMPIONS && champion) {
@@ -78,17 +74,17 @@ const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
-  const handleRemoveChampion = (champion: string) => {
-    const updatedChampions = selectedChampions.filter((c) => c !== champion);
-    setSelectedChampions(updatedChampions);
-    setSelectedFromDropdown(true);
-    if (updatedChampions.length === 0) {
-      setMatchedTeamComps([]); // Clear matched team comps if no champions selected
-    }
-    // else {
-    //   setMatchedTeamComps(getMatchedTeamComps(updatedChampions)); // Update matched team comps based on remaining selected champions
-    // }
-  };
+  // const handleRemoveChampion = (champion: string) => {
+  //   const updatedChampions = selectedChampions.filter((c) => c !== champion);
+  //   setSelectedChampions(updatedChampions);
+  //   setSelectedFromDropdown(true);
+  //   if (updatedChampions.length === 0) {
+  //     setMatchedTeamComps([]); // Clear matched team comps if no champions selected
+  //   }
+  //   // else {
+  //   //   setMatchedTeamComps(getMatchedTeamComps(updatedChampions)); // Update matched team comps based on remaining selected champions
+  //   // }
+  // };
 
   return (
     <div>

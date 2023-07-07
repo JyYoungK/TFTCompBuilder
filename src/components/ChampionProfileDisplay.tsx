@@ -30,14 +30,13 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     }
   };
 
-  const getTextSizeClass = (name: string) => {
-    return name.length >= 8 ? "text-sm" : "";
-  };
-
   const { name } = champion;
   const borderColorClass = getBorderColorClass(name);
-  const textSizeClass = getTextSizeClass(name);
   const championProfileURL = `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
+  //   const getTextSizeClass = (name: string) => {
+  //     return name.length >= 8 ? "text-sm" : "";
+  //   };
+  //   const textSizeClass = getTextSizeClass(name);
 
   return (
     <div>
