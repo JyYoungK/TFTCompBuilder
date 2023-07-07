@@ -34,18 +34,25 @@ const DisplayEarlyTeamComps: React.FC<DisplayTeamCompsProps> = ({
     fetchData();
   }, []);
 
-  const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedRow, setExpandedRow] = useState<number[]>([]);
   const [expanded, setExpanded] = useState(false);
   const [clusterId, setClusterId] = useState(null);
   const [teamCompIDS, setTeamCompIDS] = useState<number[]>([]);
   const [filteredComps, setFilteredComps] = useState<any>();
 
   const toggleRowExpansion = async (index: any, comp: Season9TeamComp) => {
+    setExpandedRow((prevExpandedRows) => {
+      if (prevExpandedRows.includes(index)) {
+        // Row is already expanded, collapse it
+        return prevExpandedRows.filter((rowIndex) => rowIndex !== index);
+      } else {
+        // Row is not expanded, expand it
+        return [...prevExpandedRows, index];
+      }
+    });
     if (expandedRow === index) {
-      setExpandedRow(null);
       setExpanded(false);
     } else {
-      setExpandedRow(index);
       setExpanded(true);
 
       if (typeof comp === "object") {
@@ -102,8 +109,8 @@ const DisplayEarlyTeamComps: React.FC<DisplayTeamCompsProps> = ({
     <div className="container mx-auto my-4">
       <div className="flex w-full flex-col">
         <div className="grid grid-cols-6 text-2xl font-bold">
-          <div className="col-span-1 pl-8 text-start ">Rank</div>
-          <div className="col-span-4 text-start ">Early Game Champions</div>
+          <div className="col-span-1 pl-8 text-start">Rank</div>
+          <div className="col-span-4 text-start">Early Game Champions</div>
           {expanded && <div className="col-span-1 text-center"></div>}
         </div>
         <div className="">
@@ -117,12 +124,12 @@ const DisplayEarlyTeamComps: React.FC<DisplayTeamCompsProps> = ({
                 onClick={() => toggleRowExpansion(index, comp)}
               >
                 {/* RANK */}
-                <div className="col-span-1 flex items-center pl-8 text-start text-2xl font-bold ">
+                <div className="col-span-1 flex items-center pl-8 text-start text-2xl font-bold">
                   {comp.name}
                 </div>
                 {/* EARLY COMP */}
                 <div className="col-span-4 text-start">
-                  <div className=" flex flex-row space-x-2">
+                  <div className="flex flex-row space-x-2">
                     {comp.champions.map((champion, index) => (
                       <ChampionProfileDisplay
                         key={index}
@@ -132,11 +139,23 @@ const DisplayEarlyTeamComps: React.FC<DisplayTeamCompsProps> = ({
                     ))}
                   </div>
                 </div>
-                <div className="col-span-1 flex items-center text-end">
-                  Show
+                <div className="col-span-1 mr-3 flex items-center justify-end">
+                  {expandedRow.includes(index) ? (
+                    <img
+                      className="arrow-icon rotate h-10 w-10 2xl:h-16 2xl:w-16"
+                      src="/icons/ArrowIcon.png"
+                      alt="Arrow Icon"
+                    />
+                  ) : (
+                    <img
+                      className="arrow-icon h-10 w-10 2xl:h-16 2xl:w-16"
+                      src="/icons/ArrowIcon.png"
+                      alt="Arrow Icon"
+                    />
+                  )}
                 </div>
               </div>
-              {expandedRow === index && (
+              {expandedRow.includes(index) && (
                 <div className="mt-2 border-2 border-[#ffe187] bg-[#f3ffc9] p-4">
                   <DisplayLateTeamComp filteredComps={filteredComps} />
                 </div>

@@ -45,9 +45,9 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
         <img
           src={championProfileURL}
           alt={name}
-          className={`h-10 w-10 rounded-md border-4 2xl:h-[69px] 2xl:w-[69px] ${borderColorClass}`}
+          className={`h-10 w-10 rounded-md border-[3.5px] 2xl:h-[69px] 2xl:w-[69px] ${borderColorClass}`}
         />
-        <div className="absolute bottom-1 left-0 right-0 flex items-end justify-center">
+        <div className="absolute bottom-0.5 left-0 right-0 flex items-end justify-center ">
           {buildName &&
             buildName.map((itemName: string, index: number) => (
               <img

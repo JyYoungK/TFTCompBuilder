@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+.arrow-icon {
+  /* Adjust the size as needed */
+  transition: transform 0.4s ease; /* Smooth transition for the rotation */
+  transform: rotate(270deg); /* Rotate the arrow by 270 degrees */
+}
+
+.rotate {
+  transform: rotate(90deg); /* Rotate the arrow by 180 degrees */
+}
