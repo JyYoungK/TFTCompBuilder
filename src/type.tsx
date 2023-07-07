@@ -5,12 +5,6 @@ export interface ChampionDetails {
 
 export interface Season9TeamComp {
   name: string;
-  tier: string;
-  speed: string;
-  date: string;
-  augments: string[];
-  win: number;
-  loss: number;
   champions: ChampionDetails[];
 }
 

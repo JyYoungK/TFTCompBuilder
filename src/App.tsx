@@ -4,7 +4,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import ItemTierList from "./components/ItemTierList";
 import AugmentTierList from "./components/AugmentTierList";
-import DisplayTeamComps from "./components/DisplayTeamComps";
+import DisplayEarlyTeamComps from "./components/DisplayEarlyTeamComps";
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -45,18 +45,19 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center text-center w-full ">
-      <Navbar
+    <div className="flex w-full flex-col justify-center text-center ">
+      {/* <Navbar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setMatchedTeamComps={setMatchedTeamComps}
         setSelectedFromDropdown={setSelectedFromDropdown}
         searchInputRef={searchInputRef}
-      />
-      <div className="flex flex-row mt-5">
-        <DisplayTeamComps matchedTeamComps={matchedTeamComps} />
+      /> */}
+      <div className="mt-5 flex flex-row">
+        <DisplayEarlyTeamComps />
+        {/* <DisplayTeamComps matchedTeamComps={matchedTeamComps} />
         <AugmentTierList />
-        <ItemTierList />
+        <ItemTierList /> */}
       </div>
     </div>
   );
