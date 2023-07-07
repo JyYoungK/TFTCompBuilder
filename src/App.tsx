@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Season9TeamComp } from "./type";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import ItemTierList from "./components/ItemTierList";
-import AugmentTierList from "./components/AugmentTierList";
 import DisplayEarlyTeamComps from "./components/DisplayEarlyTeamComps";
+import HelpfulTool from "./components/HelpfulTool";
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -46,19 +45,17 @@ const App: React.FC = () => {
 
   return (
     <div className="flex w-full flex-col justify-center text-center ">
-      {/* <Navbar
+      <Navbar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setMatchedTeamComps={setMatchedTeamComps}
         setSelectedFromDropdown={setSelectedFromDropdown}
         searchInputRef={searchInputRef}
-      /> */}
-      <div className="mt-5 flex flex-row">
-        <DisplayEarlyTeamComps />
-        {/* <DisplayTeamComps matchedTeamComps={matchedTeamComps} />
-        <AugmentTierList />
-        <ItemTierList /> */}
+      />
+      <div className="mt-10 flex flex-row">
+        <DisplayEarlyTeamComps matchedTeamComps={matchedTeamComps} />
       </div>
+      <HelpfulTool />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export const season9ChampionList = [
   { name: "Gwen", cost: 4 },
   { name: "Heimerdinger", cost: 5 },
   { name: "Irelia", cost: 1 },
-  { name: "Jarvan", cost: 4 },
+  { name: "JarvanIV", cost: 4 },
   { name: "Jayce", cost: 3 },
   { name: "Jhin", cost: 1 },
   { name: "Jinx", cost: 2 },
@@ -61,6 +61,27 @@ export const season9ChampionList = [
   { name: "Zed", cost: 2 },
   { name: "Zeri", cost: 4 },
 ];
+
+export interface TFTLegendMap {
+  [key: number]: string;
+}
+
+export const TFTLegendMap: TFTLegendMap = {
+  27: "AurelionSol",
+  28: "Bard",
+  23: "Caitlyn",
+  19: "Draven",
+  18: "Ezreal",
+  26: "LeeSin",
+  25: "MasterYi",
+  22: "Ornn",
+  24: "Pengu",
+  16: "TahmKench",
+  20: "TwistedFate",
+  21: "Urf",
+  15: "Veigar",
+  17: "Vladimir",
+};
 
 export const season9EarlyGameTeamCompData: Season9TeamComp[] = [
   {

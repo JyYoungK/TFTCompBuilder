@@ -9,8 +9,6 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   champion,
   buildName,
 }) => {
-  console.log(champion);
-  console.log(buildName);
   const getBorderColorClass = (championName: string) => {
     const championData = season9ChampionList.find(
       (champ) => champ.name.toLowerCase() === championName.toLowerCase()
@@ -42,25 +40,30 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   const championProfileURL = `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
 
   return (
-    <div key={name} className="relative flex flex-col">
-      {buildName && (
-        <div className="absolute bottom-0 left-0 flex">
-          {buildName.map((itemName: string, index: number) => (
-            <img
-              key={index}
-              src={`https://cdn.metatft.com/file/metatft/items/${itemName.toLowerCase()}.png`}
-              alt={itemName}
-              className="h-6 w-6"
-            />
-          ))}
+    <div>
+      <div key={name} className="relative">
+        <img
+          src={championProfileURL}
+          alt={name}
+          className={`h-10 w-10 rounded-md border-4 2xl:h-[69px] 2xl:w-[69px] ${borderColorClass}`}
+        />
+        <div className="absolute bottom-1 left-0 right-0 flex items-end justify-center">
+          {buildName &&
+            buildName.map((itemName: string, index: number) => (
+              <img
+                key={index}
+                src={`https://cdn.metatft.com/file/metatft/items/${itemName.toLowerCase()}.png`}
+                alt={itemName}
+                className="h-3 w-3 2xl:h-4 2xl:w-4"
+              />
+            ))}
         </div>
-      )}
-      <div
-        className={`flex flex-col items-center border-2 ${borderColorClass}`}
-      >
-        <img src={championProfileURL} alt={name} className="h-16 w-16" />
       </div>
-      <div className={`whitespace-nowrap ${textSizeClass}`}>{name}</div>
+      {/* <div
+        className={`flex h-6 items-center justify-center text-center ${textSizeClass}`}
+      >
+        {name}
+      </div> */}
     </div>
   );
 };

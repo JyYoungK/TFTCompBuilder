@@ -93,10 +93,12 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div>
       <div className="absolute right-8 top-5 flex flex-row items-center">
-        <div className="mr-4 text-3xl font-bold"> SEASON 9 TFT CHEAT SHEET</div>
+        <div className="mr-4 text-3xl font-bold text-green-500">
+          SEASON 9 TFT CHEATSHEET
+        </div>
         <img src="/icons/Penguin.png" className="h-16 w-16 "></img>
       </div>
-      <div className="flex flex-row items-center text-center">
+      {/* <div className="flex flex-row items-center text-center">
         <input
           ref={searchInputRef}
           type="text"
@@ -124,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({
             </span>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="relative">
         {searchTerm.length > 0 && (
           <div className="absolute z-10 mt-4 rounded-lg bg-white px-4 py-2 shadow-md">

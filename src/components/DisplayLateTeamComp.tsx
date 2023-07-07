@@ -1,6 +1,7 @@
 import React from "react";
 import ChampionProfileDisplay from "./championProfileDisplay";
-import { season9ChampionList } from "../season9/season9Comp";
+import { season9ChampionList, TFTLegendMap } from "../season9/season9Comp";
+import { formatAugmentedString } from "./HelperFunctions";
 
 interface DisplayLateTeamCompProps {
   filteredComps: any[] | undefined;
@@ -9,21 +10,37 @@ interface DisplayLateTeamCompProps {
 const DisplayLateTeamComp: React.FC<DisplayLateTeamCompProps> = ({
   filteredComps,
 }) => {
-  console.log(filteredComps);
   return (
-    <div className="flex w-full flex-col">
-      <div className="flex flex-row">
-        <div className="w-30  px-4 py-2 text-lg font-bold">AVG</div>
-        <div className="px-4 py-2 text-lg font-bold">Late Game Champions</div>
+    <div className="mt-4 flex w-full flex-col">
+      <div className="grid grid-cols-10 py-2 text-lg font-bold">
+        <div className="col-span-1">AVG</div>
+        <div className="col-span-1">PICK</div>
+        <div className="col-span-4">Best Late Comp Transition</div>
+        <div className="col-span-2">Augment Suggestion</div>
+        <div className="col-span-2">Legend Suggestion</div>
       </div>
-      <div className="bg-[#f9f4ac]">
+      <div className="">
         {filteredComps?.map((comp, index: number) => (
-          <div key={index} className="flex flex-row">
-            <div className="w-30 flex items-center justify-center  px-4 py-2 text-lg font-bold ">
-              {comp[0].overall.avg.toFixed(2)}{" "}
+          <div
+            key={index}
+            className="mt-2 grid grid-cols-10 items-center rounded-md border-4 border-[#ffffee] bg-[#fafae5] py-4"
+          >
+            {/* AVG */}
+            <div className="col-span-1 justify-center text-lg font-bold ">
+              {(
+                comp[0].overall.avg -
+                (4.4 - comp[0].overall.avg.toFixed(2)) * 8
+              ).toFixed(2)}
             </div>
-            <div className="flex items-center px-4 py-2 pt-2">
-              <div>{comp[0].suggested_legends}</div>
+            {/* PICK */}
+            <div className="col-span-1 justify-center text-lg font-bold ">
+              {(comp[0].trends[comp[0].trends.length - 1].pick * 100).toFixed(
+                2
+              )}
+              %
+            </div>
+            {/* LATE GAME */}
+            <div className="col-span-4 justify-center  ">
               <div className="flex flex-row space-x-2">
                 {comp[0].unit_stats
                   .slice(0, 8)
@@ -60,6 +77,35 @@ const DisplayLateTeamComp: React.FC<DisplayLateTeamCompProps> = ({
                     );
                   })}
               </div>
+            </div>
+            {/* AUGMENT */}
+            <div className="col-span-2 text-sm font-bold 2xl:text-xl">
+              {comp[0].augments.slice(1, 4).map((item: any, index: number) => (
+                <div className="flex flex-col" key={index}>
+                  <div>{formatAugmentedString(item.aug)}</div>
+                </div>
+              ))}
+            </div>
+            {/* LEGEND */}
+            <div className="col-span-2 flex flex-row justify-center space-x-2">
+              {comp[0].suggested_legends
+                .sort((a: number, b: number) => a - b)
+                .slice(1, 4)
+                .map((item: any, index: number) => {
+                  const championName = TFTLegendMap[item];
+                  const imageUrl = `https://cdn.metatft.com/file/metatft/legends/legend_largecircle_${championName.toLowerCase()}.png`;
+
+                  return (
+                    <div className="flex flex-row" key={index}>
+                      {/* <div>{championName}</div> */}
+                      <img
+                        className="h-10 w-10 2xl:h-12 2xl:w-12"
+                        src={imageUrl}
+                        alt={championName}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
         ))}
