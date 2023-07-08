@@ -1,61 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Season9TeamComp } from "./type";
-import "./App.css";
-import Navbar from "./components/Navbar";
-import DisplayEarlyTeamComps from "./components/DisplayEarlyTeamComps";
 import HelpfulTool from "./components/HelpfulTool";
+import AugmentRecommend from "./components/AugmentPanel/AugmentRecommend";
+import UnitManagement from "./components/UnitPanel/UnitManagement";
+import TeamSuggestion from "./components/TeamCompPanel/TeamSuggestion";
+import "./App.css";
 
 const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [matchedTeamComps, setMatchedTeamComps] = useState<Season9TeamComp[]>(
-    []
-  );
-  const [selectedFromDropdown, setSelectedFromDropdown] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        searchInputRef.current &&
-        !searchInputRef.current.contains(event.target as Node) &&
-        !selectedFromDropdown
-      ) {
-        setSearchTerm("");
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [selectedFromDropdown]);
-
-  useEffect(() => {
-    const handleDropdownItemClick = () => {
-      setSelectedFromDropdown(true);
-    };
-
-    document.addEventListener("mousedown", handleDropdownItemClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleDropdownItemClick);
-    };
-  }, []);
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault(); // Prevent the default context menu from showing up
+    // Perform your custom right-click logic here
+    console.log("Right-clicked!");
+  };
 
   return (
-    <div className="flex w-full flex-col justify-center text-center ">
-      <Navbar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setMatchedTeamComps={setMatchedTeamComps}
-        setSelectedFromDropdown={setSelectedFromDropdown}
-        searchInputRef={searchInputRef}
-      />
-      <div className="mt-10 flex flex-row">
-        <DisplayEarlyTeamComps matchedTeamComps={matchedTeamComps} />
+    <div
+      className="grid w-full grid-cols-3 grid-rows-5 justify-center text-center"
+      onContextMenu={handleContextMenu}
+    >
+      <div className="row-span-5">
+        <AugmentRecommend />
       </div>
-      <HelpfulTool />
+      <div className="row-span-5">
+        <UnitManagement />{" "}
+      </div>
+
+      <div className="row-span-5">
+        <TeamSuggestion />{" "}
+      </div>
+
+      {/* <HelpfulTool /> */}
     </div>
   );
 };
