@@ -97,8 +97,6 @@ const App: React.FC = () => {
     }
   };
 
-  console.log(enemyUnitPool);
-
   return (
     <div className="grid w-full grid-cols-2 justify-center p-2 text-center">
       <UnitAvailability

@@ -31,7 +31,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
               )
           )
           //remove ones that are played low
-          .filter((comp: any) => comp.count >= 10)
+          .filter((comp: any) => comp.count >= 15)
           .sort((a: any, b: any) => (lowLevel ? b.win - a.win : a.avg - b.avg))
           .slice(0, 7)
           .map((comp: any, index: number) => {

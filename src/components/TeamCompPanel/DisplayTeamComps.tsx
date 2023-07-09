@@ -41,10 +41,22 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     } else {
       setSelectedLevel(level);
       setSelectedFilteredEarlyComps(
-        filteredEarlyOptions.filter((comp: any) => comp.level === level)
+        filteredEarlyOptions.filter((comp: any) => {
+          const unitList = comp.unit_list.split("&");
+          const shouldFilter = unitList.some((unit: any) =>
+            enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+          );
+          return !shouldFilter && comp.level === level;
+        })
       );
       setSelectedFilteredLateComps(
-        filteredLateOptions.filter((comp: any) => comp.num_units === level)
+        filteredLateOptions.filter((comp: any) => {
+          const unitList = comp.units_list.split("&");
+          const shouldFilter = unitList.some((unit: any) =>
+            enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+          );
+          return !shouldFilter && comp.num_units === level;
+        })
       );
       // setHighestWinRateComps(
       //   highestWinRateOptions.filter((comp: any) => comp.level === level)
@@ -59,25 +71,18 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
         let unitList;
         if (teamComp.unit_list) {
           unitList = teamComp.unit_list.split("&");
-          const shouldInclude = !unitList.some((unit: string) => {
-            const unitCountInEnemy = enemyUnitPool.filter(
-              (enemyUnit: string) => enemyUnit === unit
-            ).length;
-            return unitCountInEnemy >= 6;
-          });
-          if (shouldInclude) {
-            const matchingUnits = unitList.filter((unit: string) =>
-              myUnitPool.includes(unit.slice(5))
-            );
-            return (
-              matchingUnits.length >= 1 &&
-              unitList.length === parseInt(property)
-            );
+          const matchingUnits = unitList.filter((unit: string) =>
+            myUnitPool.includes(unit.slice(5))
+          );
+          const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
+          if (property > 6) {
+            return uniqueMatchingUnits.length >= 2; // Update the condition to check for 2 or more unique matching units
           } else {
-            return false;
+            return uniqueMatchingUnits.length >= 1; // Update the condition to check for 1 or more unique matching units
           }
         }
       });
+
       if (matchingComps.length > 0) {
         return [...result, ...matchingComps];
       }
@@ -93,25 +98,14 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
         let unitList;
         if (teamComp.units_list) {
           unitList = teamComp.units_list.split("&");
-          const shouldInclude = !unitList.some((unit: string) => {
-            const unitCountInEnemy = enemyUnitPool.filter(
-              (enemyUnit: string) => enemyUnit === unit
-            ).length;
-            return unitCountInEnemy >= 6;
-          });
-          if (shouldInclude) {
-            const matchingUnits = unitList.filter((unit: string) =>
-              myUnitPool.includes(unit.slice(5))
-            );
-            return (
-              matchingUnits.length >= 1 &&
-              unitList.length === parseInt(property)
-            );
-          } else {
-            return false;
-          }
+          const matchingUnits = unitList.filter((unit: string) =>
+            myUnitPool.includes(unit.slice(5))
+          );
+          const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
+          return uniqueMatchingUnits.length >= 3; // Update the condition to check for 2 or more unique matching units
         }
       });
+
       if (matchingComps.length > 0) {
         return [...result, ...matchingComps];
       }
@@ -155,13 +149,13 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
           {level <= 7 ? (
             <TeamCompDisplay
               teamComps={selectedFilteredEarlyComps}
-              title="Best Comp that fits your pool"
+              title="Best Early Comp that fits your pool"
               lowLevel={true}
             />
           ) : (
             <TeamCompDisplay
               teamComps={selectedFilteredLateComps}
-              title="Best Comp that fits your pool"
+              title="Best Late Comp that fits your pool"
               lowLevel={false}
             />
           )}
