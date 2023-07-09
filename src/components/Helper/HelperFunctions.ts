@@ -29,3 +29,18 @@ export function formatAugmentedString(aug: string): string {
 
   return formattedString.trim();
 }
+
+export const getMaximumCardCount = (cost: number) => {
+  switch (cost) {
+    case 2:
+      return 22;
+    case 3:
+      return 18;
+    case 4:
+      return 12;
+    case 5:
+      return 10;
+    default:
+      return 0;
+  }
+};

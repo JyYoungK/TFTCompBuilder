@@ -8,14 +8,6 @@ export interface Season9TeamComp {
   champions: ChampionDetails[];
 }
 
-type SortOrder = { [key: string]: number };
-
-export const sortOrder: SortOrder = {
-  "Roll at 6 (Early Game Comp)": 1,
-  "Roll at 7 (Mid Game Comp)": 2,
-  "Roll at 8 (Late Game Comp)": 3,
-};
-
 export interface Item {
   itemName: string;
   count: number;
@@ -47,4 +39,16 @@ export type AugmentUnit = {
   augment: string;
   units: string[];
   avgPlace: number;
+};
+
+export type EarlyTeamComp = {
+  id: string;
+  name: string;
+  unit_list: any;
+  avg: number;
+  win: number;
+};
+
+export type EarlyOptions = {
+  [key: number]: EarlyTeamComp[];
 };

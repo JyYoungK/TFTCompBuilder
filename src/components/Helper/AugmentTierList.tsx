@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AugmentData, AugmentUnit } from "../type";
+import { AugmentData, AugmentUnit } from "../../type";
 
 function AugmentTierList() {
   const [augmentUnits, setAugmentUnits] = useState<AugmentData[]>([]);
@@ -73,8 +73,8 @@ function AugmentTierList() {
   }
 
   return (
-    <div className="w-2/6 h-full ml-4 bg-amber-950 p-4 border-4 border-red-500">
-      <h1 className="mb-8 text-3xl underline font-black text-red-300">
+    <div className="ml-4 h-full w-2/6 border-4 border-red-500 bg-amber-950 p-4">
+      <h1 className="mb-8 text-3xl font-black text-red-300 underline">
         Top Augments
       </h1>
       <ul>
@@ -86,12 +86,12 @@ function AugmentTierList() {
                   <strong>Augment:</strong>{" "}
                   {transformAugmentName(augment.augment)}
                 </div>
-                <div className="grid 2xl:grid-cols-9 grid-cols-5">
+                <div className="grid grid-cols-5 2xl:grid-cols-9">
                   {augment.units.slice(0, 9).map((championUrl) => (
                     <img
                       key={championUrl}
                       src={getImageUrl(championUrl)}
-                      className="w-12 h-12"
+                      className="h-12 w-12"
                     />
                   ))}
                 </div>

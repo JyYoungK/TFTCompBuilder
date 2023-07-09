@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Item, ItemCategory, ItemCategoryRow } from "../type";
+import { Item, ItemCategory, ItemCategoryRow } from "../../type";
 import { formatAugmentedString } from "./HelperFunctions";
 
 interface Augment {

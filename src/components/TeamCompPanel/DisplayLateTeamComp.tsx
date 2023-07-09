@@ -1,7 +1,7 @@
 import React from "react";
-import ChampionProfileDisplay from "./championProfileDisplay";
-import { season9ChampionList, TFTLegendMap } from "../season9/season9Comp";
-import { formatAugmentedString } from "./HelperFunctions";
+import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
+import { season9ChampionList, TFTLegendMap } from "../../season9/season9Comp";
+import { formatAugmentedString } from "../Helper/HelperFunctions";
 
 interface DisplayLateTeamCompProps {
   filteredComps: any[] | undefined;
