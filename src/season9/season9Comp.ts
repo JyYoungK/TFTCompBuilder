@@ -14,7 +14,7 @@ export const season9ChampionList = [
   { name: "Garen", cost: 3, myCount: 0, enemyCount: 0 },
   { name: "Gwen", cost: 4, myCount: 0, enemyCount: 0 },
   { name: "Heimerdinger", cost: 5, myCount: 0, enemyCount: 0 },
-  { name: "HeimerdingerTurret", cost: 5, myCount: 0, enemyCount: 0 },
+  // { name: "HeimerdingerTurret", cost: 5, myCount: 0, enemyCount: 0 },
   { name: "Irelia", cost: 1, myCount: 0, enemyCount: 0 },
   { name: "JarvanIV", cost: 4, myCount: 0, enemyCount: 0 },
   { name: "Jayce", cost: 3, myCount: 0, enemyCount: 0 },

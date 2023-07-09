@@ -18,55 +18,114 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
   earlyTeamCompOptions,
   lateTeamCompOptions,
 }) => {
-  const [expandedRow, setExpandedRow] = useState<number[]>([]);
-  const [expanded, setExpanded] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<number>(5);
   const [selectedFilteredEarlyComps, setSelectedFilteredEarlyComps] = useState<
     EarlyTeamComp[]
   >([]);
   const [selectedFilteredLateComps, setSelectedFilteredLateComps] = useState<
     EarlyTeamComp[]
   >([]);
-  const [highestWinRateComps, setHighestWinRateComps] = useState<
+  const [nonFilteredEarlyComps, setNonFilteredEarlyComps] = useState<
     EarlyTeamComp[]
   >([]);
-  const [level, setLevel] = useState(0);
+  const [nonFilteredLateComps, setNonFilteredLateComps] = useState<
+    EarlyTeamComp[]
+  >([]);
 
   const handleLevelToggle = (level: number) => {
-    setLevel(level);
-    if (level === selectedLevel) {
-      setSelectedLevel(null);
-      setSelectedFilteredEarlyComps([]);
-      setHighestWinRateComps([]);
-    } else {
-      setSelectedLevel(level);
-      setSelectedFilteredEarlyComps(
-        filteredEarlyOptions.filter((comp: any) => {
-          const unitList = comp.unit_list.split("&");
-          const shouldFilter = unitList.some((unit: any) =>
-            enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
-          );
-          return !shouldFilter && comp.level === level;
-        })
-      );
-      setSelectedFilteredLateComps(
-        filteredLateOptions.filter((comp: any) => {
-          const unitList = comp.units_list.split("&");
-          const shouldFilter = unitList.some((unit: any) =>
-            enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
-          );
-          return !shouldFilter && comp.num_units === level;
-        })
-      );
-      // setHighestWinRateComps(
-      //   highestWinRateOptions.filter((comp: any) => comp.level === level)
-      // );
-    }
+    setSelectedLevel(level);
+    setNonFilteredEarlyComps(
+      EarlyOptions.filter((comp: any) => {
+        const unitList = comp.unit_list.split("&");
+        const shouldFilter = unitList.some((unit: any) =>
+          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+        );
+        return (
+          !shouldFilter &&
+          unitList.length === level &&
+          Math.floor(comp.level) === level
+        );
+      })
+    );
+    setNonFilteredLateComps(
+      LateOptions.filter((comp: any) => {
+        const unitList = comp.units_list.split("&");
+        const shouldFilter = unitList.some((unit: any) =>
+          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+        );
+
+        return (
+          !shouldFilter && unitList.length === level && comp.num_units === level
+        );
+      })
+    );
+    setSelectedFilteredEarlyComps(
+      FilteredEarlyOptions.filter((comp: any) => {
+        const unitList = comp.unit_list.split("&");
+        const shouldFilter = unitList.some((unit: any) =>
+          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+        );
+
+        return (
+          !shouldFilter &&
+          unitList.length === level &&
+          Math.floor(comp.level) === level
+        );
+      })
+    );
+    setSelectedFilteredLateComps(
+      FilteredLateOptions.filter((comp: any) => {
+        const unitList = comp.units_list.split("&");
+        const shouldFilter = unitList.some((unit: any) =>
+          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+        );
+        return (
+          !shouldFilter && unitList.length === level && comp.num_units === level
+        );
+      })
+    );
   };
 
-  const filteredEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
+  const EarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
     (result: any[], property: any) => {
       const teamComps = earlyTeamCompOptions[property];
+      const matchingComps = teamComps.filter((teamComp: any) => {
+        if (teamComp.unit_list) {
+          return true;
+        }
+        return false;
+      });
+
+      if (matchingComps.length > 0) {
+        return [...result, ...matchingComps];
+      }
+      return result;
+    },
+    []
+  );
+
+  const LateOptions = Object.keys(lateTeamCompOptions).reduce(
+    (result: any[], property: any) => {
+      const teamComps = lateTeamCompOptions[property];
+      const matchingComps = teamComps.filter((teamComp: any) => {
+        if (teamComp.units_list) {
+          return true;
+        }
+        return false;
+      });
+
+      if (matchingComps.length > 0) {
+        return [...result, ...matchingComps];
+      }
+      return result;
+    },
+    []
+  );
+
+  const FilteredEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
+    (result: any[], property: any) => {
+      const teamComps = earlyTeamCompOptions[property];
+
       const matchingComps = teamComps.filter((teamComp: any) => {
         let unitList;
         if (teamComp.unit_list) {
@@ -91,7 +150,7 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     []
   );
 
-  const filteredLateOptions = Object.keys(lateTeamCompOptions).reduce(
+  const FilteredLateOptions = Object.keys(lateTeamCompOptions).reduce(
     (result: any[], property: any) => {
       const teamComps = lateTeamCompOptions[property];
       const matchingComps = teamComps.filter((teamComp: any) => {
@@ -102,7 +161,7 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
             myUnitPool.includes(unit.slice(5))
           );
           const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
-          return uniqueMatchingUnits.length >= 3; // Update the condition to check for 2 or more unique matching units
+          return uniqueMatchingUnits.length >= 2; // Update the condition to check for 2 or more unique matching units
         }
       });
 
@@ -113,18 +172,6 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     },
     []
   );
-
-  // const highestWinRateOptions = Object.keys(teamCompOptions).flatMap(
-  //   (property: any) => {
-  //     const teamComps = teamCompOptions[property];
-
-  //     const sortedComps = teamComps.sort((a: any, b: any) => b.win - a.win);
-
-  //     return sortedComps.slice(0, 5);
-  //   }
-  // );
-
-  // console.log(highestWinRateOptions);
 
   return (
     <div className="container mx-auto grid-rows-6">
@@ -146,23 +193,21 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
       </div>
       <div className="row-span-4 flex flex-col justify-center border-2 border-green-400 p-2">
         <div className="mt-4 flex w-full flex-col">
-          {level <= 7 ? (
+          {selectedLevel <= 7 ? (
             <TeamCompDisplay
-              teamComps={selectedFilteredEarlyComps}
-              title="Best Early Comp that fits your pool"
+              nonFilteredTeamComps={nonFilteredEarlyComps}
+              filteredTeamComps={selectedFilteredEarlyComps}
+              title="Best Early Comp"
               lowLevel={true}
             />
           ) : (
             <TeamCompDisplay
-              teamComps={selectedFilteredLateComps}
-              title="Best Late Comp that fits your pool"
+              nonFilteredTeamComps={nonFilteredLateComps}
+              filteredTeamComps={selectedFilteredLateComps}
+              title="Best Late Comp"
               lowLevel={false}
             />
           )}
-          {/* <TeamCompDisplay
-            teamComps={highestWinRateComps}
-            title="Highest Win Rate Comp"
-          /> */}
         </div>
       </div>
     </div>
@@ -170,62 +215,3 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
 };
 
 export default DisplayEarlyTeamComps;
-
-{
-  /* <div className="flex w-full flex-col">
-  <div className="grid grid-cols-6 text-2xl font-bold">
-    <div className="col-span-1 pl-8 text-start">Rank</div>
-    <div className="col-span-4 text-start">Recommended Comps</div>
-    {expanded && <div className="col-span-1 text-center"></div>}
-  </div>
-  <div className="">
-    {season9EarlyGameTeamCompData.map((comp, index) => (
-      <div
-        key={comp.name}
-        className="my-2 rounded-lg border-[3px] border-[#9ef65f] bg-[#d8ffcb] p-3"
-      >
-        <div
-          className="grid grid-cols-6"
-          onClick={() => toggleRowExpansion(index, comp)}
-        >
-          <div className="col-span-1 flex items-center pl-8 text-start text-2xl font-bold">
-            {comp.name}
-          </div>
-          <div className="col-span-4 text-start">
-            <div className="flex flex-row space-x-2">
-              {comp.champions.map((champion, index) => (
-                <ChampionProfileDisplay
-                  key={index}
-                  champion={champion}
-                  buildName={null}
-                  count={false}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="col-span-1 mr-3 flex items-center justify-end">
-            {expandedRow.includes(index) ? (
-              <img
-                className="arrow-icon rotate h-10 w-10 2xl:h-16 2xl:w-16"
-                src="/icons/ArrowIcon.png"
-                alt="Arrow Icon"
-              />
-            ) : (
-              <img
-                className="arrow-icon h-10 w-10 2xl:h-16 2xl:w-16"
-                src="/icons/ArrowIcon.png"
-                alt="Arrow Icon"
-              />
-            )}
-          </div>
-        </div>
-        {expandedRow.includes(index) && (
-          <div className="mt-2 border-2 border-[#ffe187] bg-[#f3ffc9] p-4">
-            <DisplayLateTeamComp filteredComps={filteredComps} />
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-</div> */
-}
