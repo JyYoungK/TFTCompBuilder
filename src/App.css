@@ -1,6 +1,9 @@
+html,
+body,
 #root {
   margin: 0 auto;
   text-align: center;
+  height: 100%;
   background-color: #c8ffbe;
 }
 
@@ -12,4 +15,12 @@
 
 .rotate {
   transform: rotate(90deg); /* Rotate the arrow by 180 degrees */
+}
+
+.blend-orange img {
+  filter: hue-rotate(0deg) saturate(300%) brightness(60%);
+}
+
+.blend-red img {
+  filter: hue-rotate(0deg) saturate(300%) brightness(40%);
 }

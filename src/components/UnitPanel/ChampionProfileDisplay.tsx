@@ -6,12 +6,16 @@ interface ChampionProfileDisplayProps {
   champion: any;
   buildName: any;
   count: boolean;
+  myUnitPool: any;
+  enemyUnitPool: any;
 }
 
 const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   champion,
   buildName,
   count,
+  myUnitPool,
+  enemyUnitPool,
 }) => {
   const getBorderColorClass = (championName: string) => {
     if (championName) {
@@ -40,16 +44,31 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     // Return a default border color class when championName is null or empty
     return "border-gray-500";
   };
+
   const { name, cost } = champion;
-  const [myCount, setMyCount] = useState(champion.myCount);
-  const [enemyCount, setEnemyCount] = useState(champion.enemyCount);
-  const totalCount = myCount + enemyCount;
   const borderColorClass = getBorderColorClass(name);
   const championProfileURL = `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
+  const myUnitCount = myUnitPool
+    ? myUnitPool.filter((unit: string) => unit === name).length
+    : 0;
+  const enemyUnitCount = enemyUnitPool
+    ? enemyUnitPool.filter((unit: string) => unit === name).length
+    : 0;
+  const totalCount = myUnitCount + enemyUnitCount;
+  let imageBlendModeClass = ""; // Default image blend mode class
+
+  if (enemyUnitCount >= 4 && enemyUnitCount <= 5) {
+    imageBlendModeClass = "blend-orange"; // Apply orangish color
+  } else if (enemyUnitCount >= 6) {
+    imageBlendModeClass = "blend-red"; // Apply red color
+  }
+
   return (
     <div key={name} className="relative">
       <div className="flex flex-row items-center">
-        <div className="relative">
+        <div
+          className={`relative ${imageBlendModeClass} rounded-md border-[5px] ${borderColorClass} `}
+        >
           <img
             src={
               champion.name !== ""
@@ -57,11 +76,11 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
                 : "/icons/NoChampion.png"
             }
             alt={name}
-            className={`h-10 w-10 rounded-md border-[3.5px] 2xl:h-[69px] 2xl:w-[69px] ${borderColorClass}`}
+            className={`3xl:h-[64px] 3xl:w-[64px] h-12 w-12 `}
           />
           {count && (
             <div className="absolute bottom-0.5 right-0.5 flex items-center justify-center rounded-md bg-black px-1 text-white">
-              <span className="2xl:text-md text-xs font-bold">
+              <span className="3xl:text-md text-xs font-bold">
                 {totalCount}/{getMaximumCardCount(cost)}
               </span>
             </div>

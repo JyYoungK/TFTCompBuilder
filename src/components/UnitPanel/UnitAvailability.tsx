@@ -5,11 +5,15 @@ import UnitCountManager from "./UnitCountManager";
 interface UnitAvailabilityProps {
   myUnitPool: any;
   setMyUnitPool: any;
+  enemyUnitPool: any;
+  setEnemyUnitPool: any;
 }
 
 function UnitAvailability({
   myUnitPool,
   setMyUnitPool,
+  enemyUnitPool,
+  setEnemyUnitPool,
 }: UnitAvailabilityProps): JSX.Element {
   const rows: any[][] = [];
 
@@ -31,11 +35,15 @@ function UnitAvailability({
                 champion={champion}
                 buildName={null}
                 count={true}
+                myUnitPool={myUnitPool}
+                enemyUnitPool={enemyUnitPool}
               />
               <UnitCountManager
                 champion={champion}
                 myUnitPool={myUnitPool}
                 setMyUnitPool={setMyUnitPool}
+                enemyUnitPool={enemyUnitPool}
+                setEnemyUnitPool={setEnemyUnitPool}
               />
             </div>
           ))}

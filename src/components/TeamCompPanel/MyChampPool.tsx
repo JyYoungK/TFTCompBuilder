@@ -25,7 +25,7 @@ const MyChampPool: React.FC<MyChampPoolProps> = ({
   return (
     <div className="border-2 border-blue-400">
       <div className="my-4 text-xl font-extrabold 2xl:text-3xl">
-        Champions In Your Pool
+        Champions In Your Lv {myUnitPool.length} Pool
       </div>
       <div className="flex flex-row justify-center space-x-1">
         {[...Array(10)]
@@ -57,6 +57,8 @@ const MyChampPool: React.FC<MyChampPoolProps> = ({
                 champion={{ name: championName }}
                 count={false}
                 buildName={null}
+                myUnitPool={null}
+                enemyUnitPool={null}
               />
             </div>
           ))}

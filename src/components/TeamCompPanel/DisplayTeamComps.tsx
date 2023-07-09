@@ -1,42 +1,50 @@
 import { useState } from "react";
 import { EarlyOptions, EarlyTeamComp } from "../../type";
-import { season9ChampionList } from "../../season9/season9Comp";
-import DisplayLateTeamComp from "./DisplayLateTeamComp";
-import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
-import ItemTierList from "../Helper/ItemTierList";
 import MyChampPool from "./MyChampPool";
 import TeamCompDisplay from "./TeamCompDisplay";
 
 interface DisplayEarlyTeamCompsProps {
   myUnitPool: any;
   setMyUnitPool: any;
-  earlyOptions: EarlyOptions;
+  enemyUnitPool: any;
+  earlyTeamCompOptions: EarlyOptions;
+  lateTeamCompOptions: EarlyOptions;
 }
 
 const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
   myUnitPool,
   setMyUnitPool,
-  earlyOptions,
+  enemyUnitPool,
+  earlyTeamCompOptions,
+  lateTeamCompOptions,
 }) => {
   const [expandedRow, setExpandedRow] = useState<number[]>([]);
   const [expanded, setExpanded] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
-  const [selectedFilteredComps, setSelectedFilteredComps] = useState<
+  const [selectedFilteredEarlyComps, setSelectedFilteredEarlyComps] = useState<
+    EarlyTeamComp[]
+  >([]);
+  const [selectedFilteredLateComps, setSelectedFilteredLateComps] = useState<
     EarlyTeamComp[]
   >([]);
   const [highestWinRateComps, setHighestWinRateComps] = useState<
     EarlyTeamComp[]
   >([]);
+  const [level, setLevel] = useState(0);
 
   const handleLevelToggle = (level: number) => {
+    setLevel(level);
     if (level === selectedLevel) {
       setSelectedLevel(null);
-      setSelectedFilteredComps([]);
+      setSelectedFilteredEarlyComps([]);
       setHighestWinRateComps([]);
     } else {
       setSelectedLevel(level);
-      setSelectedFilteredComps(
-        filteredOptions.filter((comp: any) => comp.level === level)
+      setSelectedFilteredEarlyComps(
+        filteredEarlyOptions.filter((comp: any) => comp.level === level)
+      );
+      setSelectedFilteredLateComps(
+        filteredLateOptions.filter((comp: any) => comp.num_units === level)
       );
       // setHighestWinRateComps(
       //   highestWinRateOptions.filter((comp: any) => comp.level === level)
@@ -44,19 +52,31 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     }
   };
 
-  const filteredOptions = Object.keys(earlyOptions).reduce(
+  const filteredEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
     (result: any[], property: any) => {
-      const teamComps = earlyOptions[property];
+      const teamComps = earlyTeamCompOptions[property];
       const matchingComps = teamComps.filter((teamComp: any) => {
-        const unitList = teamComp.unit_list.split("&");
-        console.log(property);
-        console.log(teamComp.level);
-        const matchingUnits = unitList.filter((unit: string) =>
-          myUnitPool.includes(unit.slice(5))
-        );
-        return matchingUnits.length >= 2;
-
-        // return matchingUnits.length >= Math.floor(property / 2);
+        let unitList;
+        if (teamComp.unit_list) {
+          unitList = teamComp.unit_list.split("&");
+          const shouldInclude = !unitList.some((unit: string) => {
+            const unitCountInEnemy = enemyUnitPool.filter(
+              (enemyUnit: string) => enemyUnit === unit
+            ).length;
+            return unitCountInEnemy >= 6;
+          });
+          if (shouldInclude) {
+            const matchingUnits = unitList.filter((unit: string) =>
+              myUnitPool.includes(unit.slice(5))
+            );
+            return (
+              matchingUnits.length >= 1 &&
+              unitList.length === parseInt(property)
+            );
+          } else {
+            return false;
+          }
+        }
       });
       if (matchingComps.length > 0) {
         return [...result, ...matchingComps];
@@ -66,11 +86,43 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     []
   );
 
-  console.log(filteredOptions);
+  const filteredLateOptions = Object.keys(lateTeamCompOptions).reduce(
+    (result: any[], property: any) => {
+      const teamComps = lateTeamCompOptions[property];
+      const matchingComps = teamComps.filter((teamComp: any) => {
+        let unitList;
+        if (teamComp.units_list) {
+          unitList = teamComp.units_list.split("&");
+          const shouldInclude = !unitList.some((unit: string) => {
+            const unitCountInEnemy = enemyUnitPool.filter(
+              (enemyUnit: string) => enemyUnit === unit
+            ).length;
+            return unitCountInEnemy >= 6;
+          });
+          if (shouldInclude) {
+            const matchingUnits = unitList.filter((unit: string) =>
+              myUnitPool.includes(unit.slice(5))
+            );
+            return (
+              matchingUnits.length >= 1 &&
+              unitList.length === parseInt(property)
+            );
+          } else {
+            return false;
+          }
+        }
+      });
+      if (matchingComps.length > 0) {
+        return [...result, ...matchingComps];
+      }
+      return result;
+    },
+    []
+  );
 
-  // const highestWinRateOptions = Object.keys(earlyOptions).flatMap(
+  // const highestWinRateOptions = Object.keys(teamCompOptions).flatMap(
   //   (property: any) => {
-  //     const teamComps = earlyOptions[property];
+  //     const teamComps = teamCompOptions[property];
 
   //     const sortedComps = teamComps.sort((a: any, b: any) => b.win - a.win);
 
@@ -85,33 +137,34 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
       <div className="row-span-2 h-40">
         <MyChampPool myUnitPool={myUnitPool} setMyUnitPool={setMyUnitPool} />
       </div>
-      <div className="row-span-1 space-x-2 ">
-        {/* <button onClick={() => handleLevelToggle(4)}>Lv4</button> */}
-        <button
-          className="rounded-xl border-2 border-gray-400 p-2"
-          onClick={() => handleLevelToggle(5)}
-        >
-          Lv5
-        </button>
-        <button
-          className="rounded-xl border-2 border-gray-400 p-2"
-          onClick={() => handleLevelToggle(6)}
-        >
-          Lv6
-        </button>
-        <button
-          className="rounded-xl border-2 border-gray-400 p-2"
-          onClick={() => handleLevelToggle(7)}
-        >
-          Lv7
-        </button>
+      <div className="row-span-1 space-x-2">
+        {[4, 5, 6, 7, 8, 9, 10].map((level: number) => (
+          <button
+            key={level}
+            className={`rounded-xl border-2 border-gray-500 px-4 py-2 ${
+              selectedLevel === level ? "bg-gray-400" : "bg-gray-200"
+            }`}
+            onClick={() => handleLevelToggle(level)}
+          >
+            Lv{level}
+          </button>
+        ))}
       </div>
       <div className="row-span-4 flex flex-col justify-center border-2 border-green-400 p-2">
         <div className="mt-4 flex w-full flex-col">
-          <TeamCompDisplay
-            teamComps={selectedFilteredComps}
-            title="Best Comp that fits your pool"
-          />
+          {level <= 7 ? (
+            <TeamCompDisplay
+              teamComps={selectedFilteredEarlyComps}
+              title="Best Comp that fits your pool"
+              lowLevel={true}
+            />
+          ) : (
+            <TeamCompDisplay
+              teamComps={selectedFilteredLateComps}
+              title="Best Comp that fits your pool"
+              lowLevel={false}
+            />
+          )}
           {/* <TeamCompDisplay
             teamComps={highestWinRateComps}
             title="Highest Win Rate Comp"
