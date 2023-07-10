@@ -197,7 +197,7 @@ function ItemTierList() {
   }, []);
 
   return (
-    <div className="text-md grid h-[300] w-full grid-cols-4 px-4 2xl:text-xl">
+    <div className="text-md grid h-[300] w-full grid-cols-4 py-6 2xl:text-xl">
       {itemCategoryRows.map((row: ItemCategoryRow) => (
         <div
           key={row.rowName}

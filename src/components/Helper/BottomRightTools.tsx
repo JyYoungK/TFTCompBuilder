@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import ItemTierList from "./ItemTierList";
+import { Modal } from "antd";
 
 interface BottomRightToolsProps {
   setMyUnitPool: any;
@@ -10,38 +11,15 @@ const BottomRightTools: React.FC<BottomRightToolsProps> = ({
   setMyUnitPool,
   setEnemyUnitPool,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  useEffect(() => {
-    const handleMouseClick = () => {
-      if (isModalOpen) {
-        handleModalClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleMouseClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleMouseClick);
-    };
-  }, [isModalOpen]);
-
   const resetPool = () => {
     setMyUnitPool([]);
     setEnemyUnitPool([]);
   };
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <div>
+    <div className="flex items-center">
       <div className="fixed bottom-4 right-20">
         <img
           onClick={resetPool}
@@ -53,20 +31,23 @@ const BottomRightTools: React.FC<BottomRightToolsProps> = ({
       </div>
       <div className="fixed bottom-4 right-4">
         <img
-          onClick={handleModalOpen}
+          onClick={() => setModalVisible(true)}
           src="/icons/HelperIcon.png"
           className="h-16 w-16 hover:scale-[1.1]"
           alt="Helper Icon"
           title="Item/Augment Tips"
         />
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="rounded-lg" ref={modalRef}>
-            <ItemTierList />
-          </div>
-        </div>
-      )}
+      <Modal
+        className="modalStyle"
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={null} // Remove the footer buttons
+        width={1400}
+        centered
+      >
+        <ItemTierList />
+      </Modal>
     </div>
   );
 };
