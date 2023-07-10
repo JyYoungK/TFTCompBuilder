@@ -40,7 +40,7 @@ const BottomRightTools: React.FC<BottomRightToolsProps> = ({
       </div>
       <Modal
         className="modalStyle"
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null} // Remove the footer buttons
         width={1400}

@@ -81,3 +81,13 @@ export const TFTLegendMap: TFTLegendMap = {
   15: "Veigar",
   17: "Vladimir",
 };
+
+export const extraUnitList = [
+  "TFT9_NoxianFlag",
+  "TFT_TrainingDummy",
+  "TFT9_THex",
+  "TFT9_VoidEggHerald",
+  "TFT9_VoidEggRemora",
+  "TFT9_VoidEggBaron",
+  "TFT9_HeimerdingerTurret",
+];

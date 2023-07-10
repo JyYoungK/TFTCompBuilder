@@ -32,6 +32,8 @@ export function formatString(aug: string, sliceAmount: number): string {
 
 export const getMaximumCardCount = (cost: number) => {
   switch (cost) {
+    case 1:
+      return 29;
     case 2:
       return 22;
     case 3:
@@ -42,5 +44,25 @@ export const getMaximumCardCount = (cost: number) => {
       return 10;
     default:
       return 0;
+  }
+};
+
+export const getWinRateColor = (winRate: number) => {
+  const percentage = winRate * 100;
+
+  if (winRate == undefined) {
+    return "text-black";
+  } else if (percentage < 50) {
+    return "text-red-600";
+  } else if (percentage >= 50 && percentage < 60) {
+    return "text-orange-600";
+  } else if (percentage >= 60 && percentage < 70) {
+    return "text-green-500";
+  } else if (percentage >= 70 && percentage < 80) {
+    return "text-blue-500";
+  } else if (percentage >= 80 && percentage < 90) {
+    return "text-purple-500";
+  } else {
+    return "text-pink-500";
   }
 };

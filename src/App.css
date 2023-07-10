@@ -24,9 +24,3 @@ body,
 .blend-red img {
   filter: hue-rotate(0deg) saturate(300%) brightness(40%);
 }
-
-.custom-tabs .ant-tabs-nav .ant-tabs-tab .win-rate {
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 3rem;
-}

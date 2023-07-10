@@ -52,3 +52,7 @@ export type EarlyTeamComp = {
 export type EarlyOptions = {
   [key: number]: EarlyTeamComp[];
 };
+
+export const ItemTypes = {
+  CARD: "card",
+};

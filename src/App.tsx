@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { EarlyOptions } from "./type";
 import BottomRightTools from "./components/Helper/BottomRightTools";
-import axios from "axios";
 import LayoutUnitAvailability from "./components/UnitPanel/LayoutUnitAvailability";
 import LayoutTeamComp from "./components/TeamCompPanel/LayoutTeamComp";
 import "./App.css";
@@ -105,13 +107,15 @@ const App: React.FC = () => {
         enemyUnitPool={enemyUnitPool}
         setEnemyUnitPool={setEnemyUnitPool}
       />
-      <LayoutTeamComp
-        myUnitPool={myUnitPool}
-        setMyUnitPool={setMyUnitPool}
-        enemyUnitPool={enemyUnitPool}
-        earlyTeamCompOptions={earlyTeamCompOptions}
-        lateTeamCompOptions={lateTeamCompOptions}
-      />
+      <DndProvider backend={HTML5Backend}>
+        <LayoutTeamComp
+          myUnitPool={myUnitPool}
+          setMyUnitPool={setMyUnitPool}
+          enemyUnitPool={enemyUnitPool}
+          earlyTeamCompOptions={earlyTeamCompOptions}
+          lateTeamCompOptions={lateTeamCompOptions}
+        />{" "}
+      </DndProvider>
 
       <BottomRightTools
         setMyUnitPool={setMyUnitPool}

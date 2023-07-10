@@ -63,20 +63,15 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     }
   };
 
-  // Redundant Code from UnitCountManager.tsx
   const { name, cost } = champion;
   const maximumCount = getMaximumCardCount(cost);
   const myCount = myUnitPool?.filter((unit: string) => unit === name).length;
-  const enemyCount = enemyUnitPool?.filter(
-    (unit: string) => unit === name
-  ).length;
 
   const handleMyCountIncrement = () => {
-    if (myCount < maximumCount - enemyCount || myCount < maximumCount) {
+    if (myCount < maximumCount) {
       setMyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
     }
   };
-  // -----------------------------------------
 
   const borderColorClass = getBorderColorClass(name, false);
   const championProfileImageURL = (name: string) => {
@@ -89,15 +84,12 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   const enemyUnitCount = enemyUnitPool
     ? enemyUnitPool.filter((unit: string) => unit === name).length
     : 0;
-  const totalCount = myUnitCount + enemyUnitCount;
   const [modalVisible, setModalVisible] = useState(false);
 
   let imageBlendModeClass = ""; // Default image blend mode class
 
-  if (enemyUnitCount >= 4 && enemyUnitCount <= 5) {
+  if (enemyUnitCount === 1) {
     imageBlendModeClass = "blend-orange"; // Apply orangish color
-  } else if (enemyUnitCount >= 6) {
-    imageBlendModeClass = "blend-red"; // Apply red color
   }
 
   return (
@@ -126,7 +118,7 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
           {count && (
             <div className="absolute bottom-0.5 right-0.5 flex items-center justify-center rounded-md bg-black px-1 text-white">
               <span className="3xl:text-md text-xs font-bold">
-                {totalCount}/{getMaximumCardCount(cost)}
+                {myUnitCount}/{getMaximumCardCount(cost)}
               </span>
             </div>
           )}
@@ -134,7 +126,7 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
       </div>
       <Modal
         className="modalStyle"
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={() => setModalVisible(false)}
         // title={name}
         footer={null} // Remove the footer buttons

@@ -18,7 +18,7 @@ function LayoutUnitAvailability({
   const rows: any[][] = [];
 
   // Group champions by cost
-  for (let cost = 5; cost >= 2; cost--) {
+  for (let cost = 5; cost >= 1; cost--) {
     const championsWithCost = season9ChampionList.filter(
       (champion) => champion.cost === cost
     );
@@ -26,7 +26,7 @@ function LayoutUnitAvailability({
   }
 
   return (
-    <div className="flex h-full flex-col border-2 border-red-500">
+    <div className="flex h-full flex-col border-r-2 border-lime-600">
       {rows.map((row, index) => (
         <div key={index} className="my-3 grid grid-cols-6 gap-2">
           {row.map((champion) => (
@@ -41,9 +41,6 @@ function LayoutUnitAvailability({
               />
               <UnitCountManager
                 champion={champion}
-                myUnitPool={myUnitPool}
-                setMyUnitPool={setMyUnitPool}
-                enemyUnitPool={enemyUnitPool}
                 setEnemyUnitPool={setEnemyUnitPool}
               />
             </div>

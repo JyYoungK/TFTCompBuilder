@@ -1,21 +1,38 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { season9ChampionList } from "../../season9/season9Comp";
 import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
+import { extraUnitList } from "../../season9/season9Comp";
+import { getWinRateColor } from "../Helper/HelperFunctions";
+import { Card } from "../Card/Card";
+import update from "immutability-helper";
+
+const style = {
+  width: "100%",
+};
+
+export interface Item {
+  id: number;
+  text: string;
+}
+
+export interface ContainerState {
+  cards: Item[];
+}
 
 interface TeamCompDisplayProps {
   nonFilteredTeamComps: any;
   filteredTeamComps: any;
-  title: string;
   lowLevel: boolean;
+  compLevel: number;
 }
 
 const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
   nonFilteredTeamComps,
   filteredTeamComps,
-  title,
   lowLevel,
+  compLevel,
 }) => {
   const [activeKey, setActiveKey] = useState<string>("1");
 
@@ -26,15 +43,15 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: title + " that fits your pool",
+      label: "Best Level " + compLevel + " comp that fits your pool",
     },
     {
       key: "2",
-      label: title + " in general",
+      label: "Best Level " + compLevel + " comp in general",
     },
   ];
 
-  console.log(filteredTeamComps);
+  const [cardSelected, setCardSelected] = useState(0);
 
   const filteredComps = (comps: any[]) =>
     comps
@@ -49,18 +66,13 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
       )
       .filter((comp: any) => comp.count >= 20) //must be played more than 20 times
       .sort((a: any, b: any) => (lowLevel ? b.win - a.win : a.avg - b.avg))
-      .slice(0, 7)
+      .slice(0, 10)
       .map((comp: any, index: number) => {
+        const isSelected = index === cardSelected; // Check if the current row is selected
+
         const unitList = lowLevel
           ? comp.unit_list.split("&")
           : comp.units_list.split("&");
-
-        const extra_unit_list = [
-          "voideggherald",
-          "voideggremora",
-          "voideggbaron",
-          "heimerdingerturret",
-        ];
 
         const championNames = unitList.map((champion: string) =>
           champion.slice(5)
@@ -68,7 +80,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
 
         const filteredChampionNames = championNames.filter(
           (championName: string) =>
-            !extra_unit_list.includes(championName.toLowerCase())
+            !extraUnitList.includes(championName.toLowerCase())
         );
 
         filteredChampionNames.sort((a: string, b: string) => {
@@ -85,43 +97,57 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
 
           return 0;
         });
+
         return (
-          <div key={index} className="grid grid-cols-12">
-            <div className="col-span-2 flex items-center justify-center text-lg font-bold 2xl:text-2xl">
-              {lowLevel
-                ? `${(comp.win * 100).toFixed(2)}%`
-                : `${((1 - comp.avg / 8) * 100).toFixed(2)}%`}
+          filteredChampionNames.length === compLevel && (
+            <div
+              key={index}
+              className={`grid grid-cols-12 rounded-3xl ${
+                isSelected ? "bg-fuchsia-200" : ""
+              }`}
+              onClick={() => setCardSelected(index)}
+            >
+              <div
+                className={`col-span-2 flex items-center justify-center text-lg font-bold 2xl:text-2xl ${getWinRateColor(
+                  lowLevel ? comp.win : 1 - comp.avg / 8
+                )}`}
+              >
+                {lowLevel
+                  ? `${(comp.win * 100).toFixed(2)}%`
+                  : `${((1 - comp.avg / 8) * 100).toFixed(1)}%`}
+              </div>
+              <div className="col-span-10 flex flex-row space-x-1">
+                {filteredChampionNames.map(
+                  (championName: string, subIndex: number) => (
+                    <div className="my-2" key={`${index}-${subIndex}`}>
+                      <ChampionProfileDisplay
+                        champion={{ name: championName }}
+                        count={false}
+                        myUnitPool={null}
+                        setMyUnitPool={null}
+                        enemyUnitPool={null}
+                        displayType="TeamCompDisplay"
+                      />
+                    </div>
+                  )
+                )}
+              </div>
             </div>
-            <div className="col-span-10 flex flex-row space-x-2">
-              {filteredChampionNames.map(
-                (championName: string, subIndex: number) => (
-                  <div className="my-2" key={`${index}-${subIndex}`}>
-                    <ChampionProfileDisplay
-                      champion={{ name: championName }}
-                      count={false}
-                      myUnitPool={null}
-                      setMyUnitPool={null}
-                      enemyUnitPool={null}
-                      displayType="TeamCompDisplay"
-                    />
-                  </div>
-                )
-              )}
-            </div>
-          </div>
+          )
         );
       });
 
   return (
     <div>
-      <div className="grid grid-cols-12 items-center py-2 font-bold">
-        <div className="col-span-2 mb-4 text-2xl">Win Rate</div>
-        <div className="custom-tabs col-span-10 flex justify-start text-2xl">
+      <div className="grid grid-cols-12 items-center font-bold">
+        <div className="col-span-2 mb-4 text-lg 2xl:text-2xl"></div>
+        <div className="col-span-10 flex justify-start">
           <Tabs
             items={items}
             activeKey={activeKey}
             onChange={handleTabChange}
             className="custom-tabs"
+            size="large"
           />
         </div>
       </div>

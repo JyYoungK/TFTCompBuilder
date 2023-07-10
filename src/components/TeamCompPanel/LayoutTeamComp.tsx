@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { EarlyOptions, EarlyTeamComp } from "../../type";
 import MyChampPool from "./MyChampPool";
 import TeamCompDisplay from "./TeamCompDisplay";
+import { extraUnitList } from "../../season9/season9Comp";
 
 interface LayoutTeamCompProps {
   myUnitPool: any;
@@ -33,15 +34,24 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
   >([]);
 
   const filteredEnemyUnitPool = enemyUnitPool.reduce((acc: any, unit: any) => {
-    const count = enemyUnitPool.filter((x: any) => x === unit).length;
-    if (count >= 6 && !acc.includes(unit)) {
+    const champCount = enemyUnitPool.filter((x: any) => x === unit).length;
+    if (champCount >= 1 && !acc.includes(unit)) {
       acc.push(unit);
     }
     return acc;
   }, []);
 
+  const [myCompWinRate, setMyCompWinRate] = useState<any>();
+
   useEffect(() => {
     handleUnitSuggestion();
+
+    const winRate =
+      selectedLevel <= 7
+        ? matchedEarlyOptions[0]?.win
+        : matchedLateOptions[0]?.win;
+
+    setMyCompWinRate(winRate);
   }, [
     myUnitPool,
     enemyUnitPool,
@@ -61,9 +71,9 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
         const unitList = comp.unit_list.split("&");
 
         const shouldFilter = unitList.some((unit: any) =>
-          filteredEnemyUnitPool.some((enemyUnit: string) =>
-            unit.includes(enemyUnit)
-          )
+          filteredEnemyUnitPool.some((enemyUnit: string) => {
+            unit.includes(enemyUnit);
+          })
         );
         return (
           !shouldFilter &&
@@ -160,23 +170,78 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
     []
   );
 
+  const matchedEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
+    (result: any[]) => {
+      const teamComps = earlyTeamCompOptions[selectedLevel];
+      let matchingComps: any[] = [];
+
+      if (teamComps) {
+        matchingComps = teamComps.filter((teamComp: any) => {
+          let unitList: any;
+          if (teamComp.unit_list) {
+            unitList = teamComp.unit_list.split("&");
+            const filteredUnitList = unitList
+              .filter((unit: string) => !extraUnitList.includes(unit))
+              .map((unit: string) => unit.split("_")[1]);
+
+            return (
+              filteredUnitList.sort().toString() ===
+              myUnitPool.sort().toString()
+            );
+          }
+          return false;
+        });
+      }
+
+      return [...result, ...matchingComps];
+    },
+    []
+  );
+
+  const matchedLateOptions = Object.keys(lateTeamCompOptions).reduce(
+    (result: any[]) => {
+      const teamComps = lateTeamCompOptions[selectedLevel];
+      let matchingComps: any[] = [];
+
+      if (teamComps) {
+        matchingComps = teamComps.filter((teamComp: any) => {
+          let unitList: any;
+
+          if (teamComp.units_list) {
+            unitList = teamComp.units_list.split("&");
+            const filteredUnitList = unitList
+              .filter((unit: string) => !extraUnitList.includes(unit))
+              .map((unit: string) => unit.split("_")[1]);
+
+            return (
+              filteredUnitList.sort().toString() ===
+              myUnitPool.sort().toString()
+            );
+          }
+
+          return false;
+        });
+      }
+
+      return [...result, ...matchingComps];
+    },
+    []
+  );
+
   const FilteredEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
     (result: any[], property: any) => {
       const teamComps = earlyTeamCompOptions[property];
 
       const matchingComps = teamComps.filter((teamComp: any) => {
-        let unitList;
+        let unitList: any;
         if (teamComp.unit_list) {
           unitList = teamComp.unit_list.split("&");
           const matchingUnits = unitList.filter((unit: string) =>
-            myUnitPool.includes(unit.slice(5))
+            myUnitPool.includes(unit.split("_")[1])
           );
+
           const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
-          if (property > 6) {
-            return uniqueMatchingUnits.length >= 2; // Update the condition to check for 2 or more unique matching units
-          } else {
-            return uniqueMatchingUnits.length >= 1; // Update the condition to check for 1 or more unique matching units
-          }
+          return uniqueMatchingUnits.length >= selectedLevel - 2; // Update the condition to check for 2 or more unique matching units
         }
       });
 
@@ -196,10 +261,11 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
         if (teamComp.units_list) {
           unitList = teamComp.units_list.split("&");
           const matchingUnits = unitList.filter((unit: string) =>
-            myUnitPool.includes(unit.slice(5))
+            myUnitPool.includes(unit.split("_")[1])
           );
+
           const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
-          return uniqueMatchingUnits.length >= 2; // Update the condition to check for 2 or more unique matching units
+          return uniqueMatchingUnits.length >= selectedLevel - 3; // Update the condition to check for 3 or more unique matching units
         }
       });
 
@@ -212,38 +278,43 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
   );
 
   return (
-    <div className="container mx-auto grid-rows-6">
-      <div className="row-span-2 h-40">
-        <MyChampPool myUnitPool={myUnitPool} setMyUnitPool={setMyUnitPool} />
+    <div>
+      <MyChampPool
+        myUnitPool={myUnitPool}
+        setMyUnitPool={setMyUnitPool}
+        winRate={myCompWinRate}
+      />
+      <div className="grid grid-cols-12 items-center font-bold">
+        <div className="col-span-2 flex"></div>
+        <div className="col-span-10 flex justify-start space-x-2 ">
+          {[5, 6, 7, 8, 9, 10].map((level: number) => (
+            <button
+              key={level}
+              className={`rounded-xl border-2 border-green-500 px-4 py-2 hover:bg-emerald-500 ${
+                selectedLevel === level ? "bg-emerald-500" : "bg-green-200"
+              }`}
+              onClick={() => handleLevelToggle(level)}
+            >
+              Lv{level}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="row-span-1 space-x-2">
-        {[4, 5, 6, 7, 8, 9, 10].map((level: number) => (
-          <button
-            key={level}
-            className={`rounded-xl border-2 border-gray-500 px-4 py-2 hover:bg-gray-400 ${
-              selectedLevel === level ? "bg-gray-400" : "bg-gray-200"
-            }`}
-            onClick={() => handleLevelToggle(level)}
-          >
-            Lv{level}
-          </button>
-        ))}
-      </div>
-      <div className="row-span-4 flex flex-col justify-center border-2 border-green-400 p-2">
-        <div className="mt-4 flex w-full flex-col">
+      <div className=" flex flex-col justify-center p-2">
+        <div className="flex w-full flex-col">
           {selectedLevel <= 7 ? (
             <TeamCompDisplay
               nonFilteredTeamComps={nonFilteredEarlyComps}
               filteredTeamComps={selectedFilteredEarlyComps}
-              title="Best Early Comp"
               lowLevel={true}
+              compLevel={selectedLevel}
             />
           ) : (
             <TeamCompDisplay
               nonFilteredTeamComps={nonFilteredLateComps}
               filteredTeamComps={selectedFilteredLateComps}
-              title="Best Late Comp"
               lowLevel={false}
+              compLevel={selectedLevel}
             />
           )}
         </div>
