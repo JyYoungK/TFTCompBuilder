@@ -1,16 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { season9ChampionList } from "../../season9/season9Comp";
 import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { extraUnitList } from "../../season9/season9Comp";
 import { getWinRateColor } from "../Helper/HelperFunctions";
-import { Card } from "../Card/Card";
-import update from "immutability-helper";
-
-const style = {
-  width: "100%",
-};
 
 export interface Item {
   id: number;
