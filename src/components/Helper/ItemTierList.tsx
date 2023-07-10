@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Item, ItemCategory, ItemCategoryRow } from "../../type";
-import { formatAugmentedString } from "./HelperFunctions";
+import { formatString } from "./HelperFunctions";
+import { getImageUrl } from "./apiFetch";
 
 interface Augment {
   augment: string;
@@ -195,10 +196,6 @@ function ItemTierList() {
     fetchItemData();
   }, []);
 
-  const getImageUrl = (itemName: string) => {
-    return `https://cdn.metatft.com/file/metatft/items/${itemName.toLowerCase()}.png`;
-  };
-
   return (
     <div className="text-md grid h-[300] w-full grid-cols-4 px-4 2xl:text-xl">
       {itemCategoryRows.map((row: ItemCategoryRow) => (
@@ -251,8 +248,7 @@ function ItemTierList() {
                     key={item.itemName}
                     className="justify-start py-1 text-left text-xs text-purple-800 2xl:p-2 2xl:text-sm"
                   >
-                    {formatAugmentedString(item.itemName)} -{" "}
-                    {item.place.toFixed(0)}
+                    {formatString(item.itemName, 13)} - {item.place.toFixed(0)}
                   </li>
                 ))}
               </ul>

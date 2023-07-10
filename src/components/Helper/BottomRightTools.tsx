@@ -1,7 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import ItemTierList from "./ItemTierList";
 
-function HelpfulTool() {
+interface BottomRightToolsProps {
+  setMyUnitPool: any;
+  setEnemyUnitPool: any;
+}
+
+const BottomRightTools: React.FC<BottomRightToolsProps> = ({
+  setMyUnitPool,
+  setEnemyUnitPool,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -27,14 +35,29 @@ function HelpfulTool() {
     };
   }, [isModalOpen]);
 
+  const resetPool = () => {
+    setMyUnitPool([]);
+    setEnemyUnitPool([]);
+  };
+
   return (
     <div>
+      <div className="fixed bottom-4 right-20">
+        <img
+          onClick={resetPool}
+          src="/icons/ResetIcon.png"
+          className="mb-1 h-14 w-14 hover:scale-[1.1]"
+          alt="Reset Icon"
+          title="Reset All Choices"
+        />
+      </div>
       <div className="fixed bottom-4 right-4">
         <img
           onClick={handleModalOpen}
           src="/icons/HelperIcon.png"
           className="h-16 w-16 hover:scale-[1.1]"
           alt="Helper Icon"
+          title="Item/Augment Tips"
         />
       </div>
       {isModalOpen && (
@@ -46,6 +69,6 @@ function HelpfulTool() {
       )}
     </div>
   );
-}
+};
 
-export default HelpfulTool;
+export default BottomRightTools;

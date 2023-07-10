@@ -1,53 +1,88 @@
 import { season9ChampionList } from "../../season9/season9Comp";
 import { useState } from "react";
 import { getMaximumCardCount } from "../Helper/HelperFunctions";
+import { Modal } from "antd";
+import DisplayItems from "../Items/DisplayItems";
 
 interface ChampionProfileDisplayProps {
   champion: any;
-  buildName: any;
   count: boolean;
   myUnitPool: any;
+  setMyUnitPool: any;
   enemyUnitPool: any;
+  displayType: string;
 }
 
 const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   champion,
-  buildName,
   count,
   myUnitPool,
+  setMyUnitPool,
   enemyUnitPool,
+  displayType,
 }) => {
-  const getBorderColorClass = (championName: string) => {
+  const getBorderColorClass = (championName: string, isModal: boolean) => {
     if (championName) {
       const championData = season9ChampionList.find(
         (champ) => champ.name.toLowerCase() === championName.toLowerCase()
       );
 
       if (championData) {
-        switch (championData.cost) {
-          case 5:
-            return "border-yellow-500";
-          case 4:
-            return "border-purple-500";
-          case 3:
-            return "border-blue-500";
-          case 2:
-            return "border-green-500";
-          case 1:
-            return "border-gray-500";
-          default:
-            return "";
+        if (isModal) {
+          switch (championData.cost) {
+            case 5:
+              return "rgb(234 179 8)";
+            case 4:
+              return "rgb(168 85 247)";
+            case 3:
+              return "rgb(59 130 246)";
+            case 2:
+              return "rgb(34 197 94)";
+            case 1:
+              return "rgb(107 114 128)";
+            default:
+              return "";
+          }
+        } else {
+          switch (championData.cost) {
+            case 5:
+              return "border-yellow-500";
+            case 4:
+              return "border-purple-500";
+            case 3:
+              return "border-blue-500";
+            case 2:
+              return "border-green-500";
+            case 1:
+              return "border-gray-500";
+            default:
+              return "";
+          }
         }
       }
     }
-
-    // Return a default border color class when championName is null or empty
-    return "border-gray-500";
   };
 
+  // Redundant Code from UnitCountManager.tsx
   const { name, cost } = champion;
-  const borderColorClass = getBorderColorClass(name);
-  const championProfileURL = `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
+  const maximumCount = getMaximumCardCount(cost);
+  const myCount = myUnitPool?.filter((unit: string) => unit === name).length;
+  const enemyCount = enemyUnitPool?.filter(
+    (unit: string) => unit === name
+  ).length;
+
+  const handleMyCountIncrement = () => {
+    if (myCount < maximumCount - enemyCount || myCount < maximumCount) {
+      setMyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
+    }
+  };
+  // -----------------------------------------
+
+  const borderColorClass = getBorderColorClass(name, false);
+  const championProfileImageURL = (name: string) => {
+    return `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
+  };
+
   const myUnitCount = myUnitPool
     ? myUnitPool.filter((unit: string) => unit === name).length
     : 0;
@@ -55,6 +90,8 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     ? enemyUnitPool.filter((unit: string) => unit === name).length
     : 0;
   const totalCount = myUnitCount + enemyUnitCount;
+  const [modalVisible, setModalVisible] = useState(false);
+
   let imageBlendModeClass = ""; // Default image blend mode class
 
   if (enemyUnitCount >= 4 && enemyUnitCount <= 5) {
@@ -72,11 +109,19 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
           <img
             src={
               champion.name !== ""
-                ? championProfileURL
+                ? championProfileImageURL(name)
                 : "/icons/NoChampion.png"
             }
             alt={name}
-            className={`3xl:h-[64px] 3xl:w-[64px] h-12 w-12 `}
+            className={`h-[64px] w-[64px] sm:h-12 sm:w-12 `}
+            onClick={() => {
+              if (displayType === "TeamCompDisplay") {
+                setModalVisible(true);
+              } else if (displayType === "LayoutUnitAvailability") {
+                handleMyCountIncrement();
+              }
+            }}
+            title={name}
           />
           {count && (
             <div className="absolute bottom-0.5 right-0.5 flex items-center justify-center rounded-md bg-black px-1 text-white">
@@ -87,23 +132,21 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
           )}
         </div>
       </div>
-
-      {/* <div className="absolute bottom-0.5 left-0 right-0 flex items-end justify-center ">
-          {buildName &&
-            buildName.map((itemName: string, index: number) => (
-              <img
-                key={index}
-                src={`https://cdn.metatft.com/file/metatft/items/${itemName.toLowerCase()}.png`}
-                alt={itemName}
-                className="h-3 w-3 2xl:h-4 2xl:w-4"
-              />
-            ))}
-        </div> */}
-      {/* <div
-        className={`flex h-6 items-center justify-center text-center ${textSizeClass}`}
+      <Modal
+        className="modalStyle"
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        // title={name}
+        footer={null} // Remove the footer buttons
+        style={{
+          backgroundColor: getBorderColorClass(name, true),
+        }}
       >
-        {name}
-      </div> */}
+        <DisplayItems
+          name={name}
+          championProfileImageURL={championProfileImageURL}
+        />
+      </Modal>
     </div>
   );
 };

@@ -56,9 +56,10 @@ const MyChampPool: React.FC<MyChampPoolProps> = ({
               <ChampionProfileDisplay
                 champion={{ name: championName }}
                 count={false}
-                buildName={null}
                 myUnitPool={null}
+                setMyUnitPool={null}
                 enemyUnitPool={null}
+                displayType="MyChampPool"
               />
             </div>
           ))}

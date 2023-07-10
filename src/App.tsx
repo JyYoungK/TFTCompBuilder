@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { EarlyOptions } from "./type";
-import HelpfulTool from "./components/Helper/HelpfulTool";
+import BottomRightTools from "./components/Helper/BottomRightTools";
 import axios from "axios";
-import UnitAvailability from "./components/UnitPanel/UnitAvailability";
-import DisplayTeamComps from "./components/TeamCompPanel/DisplayTeamComps";
+import LayoutUnitAvailability from "./components/UnitPanel/LayoutUnitAvailability";
+import LayoutTeamComp from "./components/TeamCompPanel/LayoutTeamComp";
 import "./App.css";
 
 const App: React.FC = () => {
@@ -99,13 +99,13 @@ const App: React.FC = () => {
 
   return (
     <div className="grid w-full grid-cols-2 justify-center p-2 text-center">
-      <UnitAvailability
+      <LayoutUnitAvailability
         myUnitPool={myUnitPool}
         setMyUnitPool={setMyUnitPool}
         enemyUnitPool={enemyUnitPool}
         setEnemyUnitPool={setEnemyUnitPool}
       />
-      <DisplayTeamComps
+      <LayoutTeamComp
         myUnitPool={myUnitPool}
         setMyUnitPool={setMyUnitPool}
         enemyUnitPool={enemyUnitPool}
@@ -113,7 +113,10 @@ const App: React.FC = () => {
         lateTeamCompOptions={lateTeamCompOptions}
       />
 
-      <HelpfulTool />
+      <BottomRightTools
+        setMyUnitPool={setMyUnitPool}
+        setEnemyUnitPool={setEnemyUnitPool}
+      />
     </div>
   );
 };

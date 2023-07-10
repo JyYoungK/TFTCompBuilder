@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EarlyOptions, EarlyTeamComp } from "../../type";
 import MyChampPool from "./MyChampPool";
 import TeamCompDisplay from "./TeamCompDisplay";
 
-interface DisplayEarlyTeamCompsProps {
+interface LayoutTeamCompProps {
   myUnitPool: any;
   setMyUnitPool: any;
   enemyUnitPool: any;
@@ -11,7 +11,7 @@ interface DisplayEarlyTeamCompsProps {
   lateTeamCompOptions: EarlyOptions;
 }
 
-const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
+const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
   myUnitPool,
   setMyUnitPool,
   enemyUnitPool,
@@ -32,55 +32,93 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
     EarlyTeamComp[]
   >([]);
 
+  const filteredEnemyUnitPool = enemyUnitPool.reduce((acc: any, unit: any) => {
+    const count = enemyUnitPool.filter((x: any) => x === unit).length;
+    if (count >= 6 && !acc.includes(unit)) {
+      acc.push(unit);
+    }
+    return acc;
+  }, []);
+
+  useEffect(() => {
+    handleUnitSuggestion();
+  }, [
+    myUnitPool,
+    enemyUnitPool,
+    earlyTeamCompOptions,
+    lateTeamCompOptions,
+    selectedLevel,
+  ]);
+
   const handleLevelToggle = (level: number) => {
     setSelectedLevel(level);
+    handleUnitSuggestion();
+  };
+
+  const handleUnitSuggestion = () => {
     setNonFilteredEarlyComps(
       EarlyOptions.filter((comp: any) => {
         const unitList = comp.unit_list.split("&");
+
         const shouldFilter = unitList.some((unit: any) =>
-          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+          filteredEnemyUnitPool.some((enemyUnit: string) =>
+            unit.includes(enemyUnit)
+          )
         );
         return (
           !shouldFilter &&
-          unitList.length === level &&
-          Math.floor(comp.level) === level
+          unitList.length === selectedLevel &&
+          Math.floor(comp.level) === selectedLevel
         );
       })
     );
+
     setNonFilteredLateComps(
       LateOptions.filter((comp: any) => {
         const unitList = comp.units_list.split("&");
         const shouldFilter = unitList.some((unit: any) =>
-          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
-        );
-
-        return (
-          !shouldFilter && unitList.length === level && comp.num_units === level
-        );
-      })
-    );
-    setSelectedFilteredEarlyComps(
-      FilteredEarlyOptions.filter((comp: any) => {
-        const unitList = comp.unit_list.split("&");
-        const shouldFilter = unitList.some((unit: any) =>
-          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+          filteredEnemyUnitPool.some((enemyUnit: string) =>
+            unit.includes(enemyUnit)
+          )
         );
 
         return (
           !shouldFilter &&
-          unitList.length === level &&
-          Math.floor(comp.level) === level
+          unitList.length === selectedLevel &&
+          comp.num_units === selectedLevel
         );
       })
     );
+
+    setSelectedFilteredEarlyComps(
+      FilteredEarlyOptions.filter((comp: any) => {
+        const unitList = comp.unit_list.split("&");
+        const shouldFilter = unitList.some((unit: any) =>
+          filteredEnemyUnitPool.some((enemyUnit: string) =>
+            unit.includes(enemyUnit)
+          )
+        );
+
+        return (
+          !shouldFilter &&
+          unitList.length === selectedLevel &&
+          Math.floor(comp.level) === selectedLevel
+        );
+      })
+    );
+
     setSelectedFilteredLateComps(
       FilteredLateOptions.filter((comp: any) => {
         const unitList = comp.units_list.split("&");
         const shouldFilter = unitList.some((unit: any) =>
-          enemyUnitPool.some((enemyUnit: string) => unit.includes(enemyUnit))
+          filteredEnemyUnitPool.some((enemyUnit: string) =>
+            unit.includes(enemyUnit)
+          )
         );
         return (
-          !shouldFilter && unitList.length === level && comp.num_units === level
+          !shouldFilter &&
+          unitList.length === selectedLevel &&
+          comp.num_units === selectedLevel
         );
       })
     );
@@ -182,7 +220,7 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
         {[4, 5, 6, 7, 8, 9, 10].map((level: number) => (
           <button
             key={level}
-            className={`rounded-xl border-2 border-gray-500 px-4 py-2 ${
+            className={`rounded-xl border-2 border-gray-500 px-4 py-2 hover:bg-gray-400 ${
               selectedLevel === level ? "bg-gray-400" : "bg-gray-200"
             }`}
             onClick={() => handleLevelToggle(level)}
@@ -214,4 +252,4 @@ const DisplayEarlyTeamComps: React.FC<DisplayEarlyTeamCompsProps> = ({
   );
 };
 
-export default DisplayEarlyTeamComps;
+export default LayoutTeamComp;

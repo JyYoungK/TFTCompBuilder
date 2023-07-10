@@ -1,5 +1,5 @@
-export function formatAugmentedString(aug: string): string {
-  let formattedString = aug.slice(13).replace(/_/g, " ");
+export function formatString(aug: string, sliceAmount: number): string {
+  let formattedString = aug.slice(sliceAmount).replace(/_/g, " ");
 
   const romanNumeralRegex = /\b(IV|V?I{0,3})\b$/g;
   const lastWord = formattedString.match(romanNumeralRegex);

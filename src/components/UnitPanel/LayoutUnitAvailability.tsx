@@ -2,19 +2,19 @@ import { season9ChampionList } from "../../season9/season9Comp";
 import ChampionProfileDisplay from "./ChampionProfileDisplay";
 import UnitCountManager from "./UnitCountManager";
 
-interface UnitAvailabilityProps {
+interface LayoutUnitAvailabilityProps {
   myUnitPool: any;
   setMyUnitPool: any;
   enemyUnitPool: any;
   setEnemyUnitPool: any;
 }
 
-function UnitAvailability({
+function LayoutUnitAvailability({
   myUnitPool,
   setMyUnitPool,
   enemyUnitPool,
   setEnemyUnitPool,
-}: UnitAvailabilityProps): JSX.Element {
+}: LayoutUnitAvailabilityProps): JSX.Element {
   const rows: any[][] = [];
 
   // Group champions by cost
@@ -33,10 +33,11 @@ function UnitAvailability({
             <div key={champion.name} className="flex flex-row">
               <ChampionProfileDisplay
                 champion={champion}
-                buildName={null}
                 count={true}
                 myUnitPool={myUnitPool}
+                setMyUnitPool={setMyUnitPool}
                 enemyUnitPool={enemyUnitPool}
+                displayType="LayoutUnitAvailability"
               />
               <UnitCountManager
                 champion={champion}
@@ -53,4 +54,4 @@ function UnitAvailability({
   );
 }
 
-export default UnitAvailability;
+export default LayoutUnitAvailability;

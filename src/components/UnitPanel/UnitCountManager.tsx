@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { getMaximumCardCount } from "../Helper/HelperFunctions";
-import { season9ChampionList } from "../../season9/season9Comp";
 
 interface UnitCountManagerProps {
   champion: any;
@@ -17,9 +15,8 @@ const UnitCountManager: React.FC<UnitCountManagerProps> = ({
   enemyUnitPool,
   setEnemyUnitPool,
 }) => {
+  // Redundant Code from ChampionProfileDisplay.tsx
   const { name, cost } = champion;
-  const maxPoolSize = 10;
-
   const maximumCount = getMaximumCardCount(cost);
   const myCount = myUnitPool.filter((unit: string) => unit === name).length;
   const enemyCount = enemyUnitPool.filter(
@@ -27,10 +24,11 @@ const UnitCountManager: React.FC<UnitCountManagerProps> = ({
   ).length;
 
   const handleMyCountIncrement = () => {
-    if (myCount < maximumCount) {
+    if (myCount < maximumCount - enemyCount || myCount < maximumCount) {
       setMyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
     }
   };
+  // -----------------------------------------
 
   const handleMyCountDecrement = () => {
     const indexOfChampion = myUnitPool.lastIndexOf(name);
@@ -42,7 +40,7 @@ const UnitCountManager: React.FC<UnitCountManagerProps> = ({
   };
 
   const handleEnemyCountIncrement = () => {
-    if (enemyCount < maximumCount) {
+    if (enemyCount < maximumCount - myCount || enemyCount < maximumCount) {
       setEnemyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
     }
   };
@@ -60,28 +58,14 @@ const UnitCountManager: React.FC<UnitCountManagerProps> = ({
     <div className="border-[4px] border-white">
       <div className="3xl:text-md 3xl:h-[64px] 3xl:w-[64px] ml-1 grid h-12 w-12 grid-cols-1 justify-center text-sm font-extrabold">
         <div className="grid grid-cols-3 items-center bg-green-400 text-center">
-          <button
-            onClick={handleMyCountIncrement}
-            disabled={
-              myCount >= maximumCount - enemyCount || myCount >= maximumCount
-            }
-          >
-            +
-          </button>
+          <button onClick={handleMyCountIncrement}>+</button>
           <span className="text-green-600">{myCount}</span>
           <button onClick={handleMyCountDecrement} disabled={myCount <= 0}>
             -
           </button>
         </div>
         <div className="grid grid-cols-3 items-center bg-red-400 text-center">
-          <button
-            onClick={handleEnemyCountIncrement}
-            disabled={
-              enemyCount >= maximumCount - myCount || enemyCount >= maximumCount
-            }
-          >
-            +
-          </button>
+          <button onClick={handleEnemyCountIncrement}>+</button>
           <span className="text-red-600">{enemyCount}</span>
           <button
             onClick={handleEnemyCountDecrement}
