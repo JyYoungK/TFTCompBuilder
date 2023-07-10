@@ -22,7 +22,7 @@ const BottomRightTools: React.FC<BottomRightToolsProps> = ({
   };
 
   useEffect(() => {
-    const handleMouseClick = (event: MouseEvent) => {
+    const handleMouseClick = () => {
       if (isModalOpen) {
         handleModalClose();
       }
