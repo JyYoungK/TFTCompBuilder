@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface UnitCountManagerProps {
   champion: any;
+  enemyUnitPool: any;
   setEnemyUnitPool: any;
 }
 
 const UnitCountManager: React.FC<UnitCountManagerProps> = ({
   champion,
+  enemyUnitPool,
   setEnemyUnitPool,
 }) => {
   const { name } = champion;
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(
+    enemyUnitPool.includes(name)
+  );
+
+  useEffect(() => {
+    setFilterActive(enemyUnitPool.includes(name));
+  }, [enemyUnitPool, name]);
 
   const handleFilter = () => {
     if (filterActive) {
@@ -21,7 +29,7 @@ const UnitCountManager: React.FC<UnitCountManagerProps> = ({
       setEnemyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
     }
 
-    setFilterActive((prevFilterActive) => !prevFilterActive);
+    setFilterActive((prevFilterActive: any) => !prevFilterActive);
   };
 
   return (

@@ -21,6 +21,10 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   enemyUnitPool,
   displayType,
 }) => {
+  const { name, cost } = champion;
+  const maximumCount = getMaximumCardCount(cost);
+  const myCount = myUnitPool?.filter((unit: string) => unit === name).length;
+
   const getBorderColorClass = (championName: string, isModal: boolean) => {
     if (championName) {
       const championData = season9ChampionList.find(
@@ -63,13 +67,10 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     }
   };
 
-  const { name, cost } = champion;
-  const maximumCount = getMaximumCardCount(cost);
-  const myCount = myUnitPool?.filter((unit: string) => unit === name).length;
-
   const handleMyCountIncrement = () => {
     if (myCount < maximumCount) {
       setMyUnitPool((prevUnitPool: string[]) => [...prevUnitPool, name]);
+      console.log(myUnitPool.includes(name));
     }
   };
 
@@ -115,6 +116,13 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
             }}
             title={name}
           />
+          {displayType === "TeamCompDisplay" && !myUnitPool.includes(name) && (
+            <img
+              src="/icons/FindIcon2.png"
+              className="absolute bottom-0.5 right-0.5 h-8 w-8 "
+              alt="FindIcon2"
+            />
+          )}
           {count && (
             <div className="absolute bottom-0.5 right-0.5 flex items-center justify-center rounded-md bg-black px-1 text-white">
               <span className="3xl:text-md text-xs font-bold">

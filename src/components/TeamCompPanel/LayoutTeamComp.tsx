@@ -237,7 +237,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
         if (teamComp.unit_list) {
           unitList = teamComp.unit_list.split("&");
           const matchingUnits = unitList.filter((unit: string) =>
-            myUnitPool.includes(unit.split("_")[1])
+            myUnitPool.includes(unit.slice(5))
           );
 
           const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
@@ -308,6 +308,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
               filteredTeamComps={selectedFilteredEarlyComps}
               lowLevel={true}
               compLevel={selectedLevel}
+              myUnitPool={myUnitPool}
             />
           ) : (
             <TeamCompDisplay
@@ -315,6 +316,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
               filteredTeamComps={selectedFilteredLateComps}
               lowLevel={false}
               compLevel={selectedLevel}
+              myUnitPool={myUnitPool}
             />
           )}
         </div>

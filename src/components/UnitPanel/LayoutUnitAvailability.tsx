@@ -41,6 +41,7 @@ function LayoutUnitAvailability({
               />
               <UnitCountManager
                 champion={champion}
+                enemyUnitPool={enemyUnitPool}
                 setEnemyUnitPool={setEnemyUnitPool}
               />
             </div>
