@@ -45,7 +45,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
   ];
 
   const [cardSelected, setCardSelected] = useState(0);
-
+  console.log(cardSelected);
   return (
     <div>
       <div className="grid grid-cols-12 items-center font-bold">
