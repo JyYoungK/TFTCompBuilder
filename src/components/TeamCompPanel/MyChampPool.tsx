@@ -7,12 +7,14 @@ interface MyChampPoolProps {
   myUnitPool: any;
   setMyUnitPool: any;
   winRate: number;
+  compLevel: number;
 }
 
 const MyChampPool: React.FC<MyChampPoolProps> = ({
   myUnitPool,
   setMyUnitPool,
   winRate,
+  compLevel,
 }) => {
   const handleRemoveChampion = (championName: string) => {
     setMyUnitPool((prevUnitPool: any) => {
@@ -41,7 +43,13 @@ const MyChampPool: React.FC<MyChampPoolProps> = ({
             winRate
           )}`}
         >
-          {winRate ? (winRate * 100).toFixed(1) : 0}%
+          {compLevel <= 7
+            ? winRate
+              ? `${(winRate * 100).toFixed(2)}%`
+              : "? %"
+            : winRate
+            ? `${((1 - winRate / 8) * 100).toFixed(2)}%`
+            : "? %"}
         </div>
         <div className="col-span-10 flex flex-row space-x-1">
           {[...Array(10)]

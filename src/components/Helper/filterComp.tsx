@@ -231,7 +231,7 @@ export const renderFilteredComps = (
                 <div>
                   {lowLevel
                     ? `${(comp.win * 100).toFixed(2)}%`
-                    : `${((1 - comp.avg / 8) * 100).toFixed(1)}%`}
+                    : `${((1 - comp.avg / 8) * 100).toFixed(2)}%`}
                 </div>
               </div>
             </div>

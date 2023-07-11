@@ -51,7 +51,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
     const winRate =
       selectedLevel <= 7
         ? matchedEarlyOptions[0]?.win
-        : matchedLateOptions[0]?.win;
+        : matchedLateOptions[0]?.avg;
 
     setMyCompWinRate(winRate);
   }, [
@@ -198,12 +198,14 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
     3
   );
 
+  console.log(matchedEarlyOptions);
   return (
     <div>
       <MyChampPool
         myUnitPool={myUnitPool}
         setMyUnitPool={setMyUnitPool}
         winRate={myCompWinRate}
+        compLevel={selectedLevel}
       />
       <div className="grid grid-cols-12 items-center font-bold">
         <div className="col-span-2 flex"></div>
