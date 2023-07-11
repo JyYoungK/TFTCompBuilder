@@ -15,6 +15,7 @@ export interface ContainerState {
 interface TeamCompDisplayProps {
   nonFilteredTeamComps: any;
   filteredTeamComps: any;
+  filteredExtraTeamComps: any;
   lowLevel: boolean;
   compLevel: number;
   myUnitPool: any;
@@ -23,6 +24,7 @@ interface TeamCompDisplayProps {
 const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
   nonFilteredTeamComps,
   filteredTeamComps,
+  filteredExtraTeamComps,
   lowLevel,
   compLevel,
   myUnitPool,
@@ -64,6 +66,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
         filteredTeamComps.length > 0 ? (
           renderFilteredComps(
             filteredTeamComps,
+            filteredExtraTeamComps,
             lowLevel,
             compLevel,
             myUnitPool,
@@ -87,6 +90,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
       nonFilteredTeamComps.length > 0 ? (
         renderFilteredComps(
           nonFilteredTeamComps,
+          filteredExtraTeamComps,
           lowLevel,
           compLevel,
           myUnitPool,

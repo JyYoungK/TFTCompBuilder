@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import { EarlyOptions, EarlyTeamComp } from "../../type";
+import { EarlyOptions, TeamComp } from "../../type";
 import MyChampPool from "./MyChampPool";
 import TeamCompDisplay from "./TeamCompDisplay";
 import { extraUnitList } from "../../season9/season9Comp";
+import {
+  getNonFilteredTeamComps,
+  getFilteredTeamComps,
+  getMatchedChamps,
+  filterByEnemyPool,
+} from "../Helper/filterComp";
 
 interface LayoutTeamCompProps {
   myUnitPool: any;
@@ -21,25 +27,21 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
 }) => {
   const [selectedLevel, setSelectedLevel] = useState<number>(5);
   const [selectedFilteredEarlyComps, setSelectedFilteredEarlyComps] = useState<
-    EarlyTeamComp[]
+    TeamComp[]
   >([]);
   const [selectedFilteredLateComps, setSelectedFilteredLateComps] = useState<
-    EarlyTeamComp[]
+    TeamComp[]
   >([]);
+  const [selectedFilteredEarlyExtraComps, setSelectedFilteredEarlyExtraComps] =
+    useState<TeamComp[]>([]);
+  const [selectedFilteredLateExtraComps, setSelectedFilteredLateExtraComps] =
+    useState<TeamComp[]>([]);
   const [nonFilteredEarlyComps, setNonFilteredEarlyComps] = useState<
-    EarlyTeamComp[]
+    TeamComp[]
   >([]);
-  const [nonFilteredLateComps, setNonFilteredLateComps] = useState<
-    EarlyTeamComp[]
-  >([]);
-
-  const filteredEnemyUnitPool = enemyUnitPool.reduce((acc: any, unit: any) => {
-    const champCount = enemyUnitPool.filter((x: any) => x === unit).length;
-    if (champCount >= 1 && !acc.includes(unit)) {
-      acc.push(unit);
-    }
-    return acc;
-  }, []);
+  const [nonFilteredLateComps, setNonFilteredLateComps] = useState<TeamComp[]>(
+    []
+  );
 
   const [myCompWinRate, setMyCompWinRate] = useState<any>();
 
@@ -67,214 +69,133 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
 
   const handleUnitSuggestion = () => {
     setNonFilteredEarlyComps(
-      EarlyOptions.filter((comp: any) => {
-        const unitList = comp.unit_list.split("&");
+      nonFilteredEarlyOptions.filter((comp: any) => {
+        const shouldFilter = filterByEnemyPool(
+          true,
+          comp,
+          enemyUnitPool,
+          selectedLevel
+        );
 
-        const shouldFilter = unitList.some((unit: any) =>
-          filteredEnemyUnitPool.some((enemyUnit: string) => {
-            unit.includes(enemyUnit);
-          })
-        );
-        return (
-          !shouldFilter &&
-          unitList.length === selectedLevel &&
-          Math.floor(comp.level) === selectedLevel
-        );
+        return shouldFilter;
       })
     );
 
     setNonFilteredLateComps(
-      LateOptions.filter((comp: any) => {
-        const unitList = comp.units_list.split("&");
-        const shouldFilter = unitList.some((unit: any) =>
-          filteredEnemyUnitPool.some((enemyUnit: string) =>
-            unit.includes(enemyUnit)
-          )
+      nonFilteredLateOptions.filter((comp: any) => {
+        const shouldFilter = filterByEnemyPool(
+          false,
+          comp,
+          enemyUnitPool,
+          selectedLevel
         );
 
-        return (
-          !shouldFilter &&
-          unitList.length === selectedLevel &&
-          comp.num_units === selectedLevel
-        );
+        return shouldFilter;
       })
     );
 
     setSelectedFilteredEarlyComps(
       FilteredEarlyOptions.filter((comp: any) => {
-        const unitList = comp.unit_list.split("&");
-        const shouldFilter = unitList.some((unit: any) =>
-          filteredEnemyUnitPool.some((enemyUnit: string) =>
-            unit.includes(enemyUnit)
-          )
+        const shouldFilter = filterByEnemyPool(
+          true,
+          comp,
+          enemyUnitPool,
+          selectedLevel
         );
 
-        return (
-          !shouldFilter &&
-          unitList.length === selectedLevel &&
-          Math.floor(comp.level) === selectedLevel
-        );
+        return shouldFilter;
       })
     );
 
     setSelectedFilteredLateComps(
       FilteredLateOptions.filter((comp: any) => {
-        const unitList = comp.units_list.split("&");
-        const shouldFilter = unitList.some((unit: any) =>
-          filteredEnemyUnitPool.some((enemyUnit: string) =>
-            unit.includes(enemyUnit)
-          )
+        const shouldFilter = filterByEnemyPool(
+          false,
+          comp,
+          enemyUnitPool,
+          selectedLevel
         );
-        return (
-          !shouldFilter &&
-          unitList.length === selectedLevel &&
-          comp.num_units === selectedLevel
+
+        return shouldFilter;
+      })
+    );
+
+    setSelectedFilteredEarlyExtraComps(
+      FilteredEarlyExtraOptions.filter((comp: any) => {
+        const shouldFilter = filterByEnemyPool(
+          true,
+          comp,
+          enemyUnitPool,
+          selectedLevel
         );
+
+        return shouldFilter;
+      })
+    );
+
+    setSelectedFilteredLateExtraComps(
+      FilteredLateExtraOptions.filter((comp: any) => {
+        const shouldFilter = filterByEnemyPool(
+          false,
+          comp,
+          enemyUnitPool,
+          selectedLevel
+        );
+
+        return shouldFilter;
       })
     );
   };
 
-  const EarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
-    (result: any[], property: any) => {
-      const teamComps = earlyTeamCompOptions[property];
-      const matchingComps = teamComps.filter((teamComp: any) => {
-        if (teamComp.unit_list) {
-          return true;
-        }
-        return false;
-      });
-
-      if (matchingComps.length > 0) {
-        return [...result, ...matchingComps];
-      }
-      return result;
-    },
-    []
+  const nonFilteredEarlyOptions = getNonFilteredTeamComps(
+    earlyTeamCompOptions,
+    "unit_list"
+  );
+  const nonFilteredLateOptions = getNonFilteredTeamComps(
+    lateTeamCompOptions,
+    "units_list"
   );
 
-  const LateOptions = Object.keys(lateTeamCompOptions).reduce(
-    (result: any[], property: any) => {
-      const teamComps = lateTeamCompOptions[property];
-      const matchingComps = teamComps.filter((teamComp: any) => {
-        if (teamComp.units_list) {
-          return true;
-        }
-        return false;
-      });
-
-      if (matchingComps.length > 0) {
-        return [...result, ...matchingComps];
-      }
-      return result;
-    },
-    []
+  const matchedEarlyOptions = getMatchedChamps(
+    earlyTeamCompOptions,
+    myUnitPool,
+    extraUnitList,
+    "unit_list"
   );
 
-  const matchedEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
-    (result: any[]) => {
-      const teamComps = earlyTeamCompOptions[selectedLevel];
-      let matchingComps: any[] = [];
-
-      if (teamComps) {
-        matchingComps = teamComps.filter((teamComp: any) => {
-          let unitList: any;
-          if (teamComp.unit_list) {
-            unitList = teamComp.unit_list.split("&");
-            const filteredUnitList = unitList
-              .filter((unit: string) => !extraUnitList.includes(unit))
-              .map((unit: string) => unit.split("_")[1]);
-
-            return (
-              filteredUnitList.sort().toString() ===
-              myUnitPool.sort().toString()
-            );
-          }
-          return false;
-        });
-      }
-
-      return [...result, ...matchingComps];
-    },
-    []
+  const matchedLateOptions = getMatchedChamps(
+    lateTeamCompOptions,
+    myUnitPool,
+    extraUnitList,
+    "units_list"
   );
 
-  const matchedLateOptions = Object.keys(lateTeamCompOptions).reduce(
-    (result: any[]) => {
-      const teamComps = lateTeamCompOptions[selectedLevel];
-      let matchingComps: any[] = [];
-
-      if (teamComps) {
-        matchingComps = teamComps.filter((teamComp: any) => {
-          let unitList: any;
-
-          if (teamComp.units_list) {
-            unitList = teamComp.units_list.split("&");
-            const filteredUnitList = unitList
-              .filter((unit: string) => !extraUnitList.includes(unit))
-              .map((unit: string) => unit.split("_")[1]);
-
-            return (
-              filteredUnitList.sort().toString() ===
-              myUnitPool.sort().toString()
-            );
-          }
-
-          return false;
-        });
-      }
-
-      return [...result, ...matchingComps];
-    },
-    []
+  const FilteredEarlyOptions = getFilteredTeamComps(
+    earlyTeamCompOptions,
+    myUnitPool,
+    "unit_list",
+    selectedLevel - 2
   );
 
-  const FilteredEarlyOptions = Object.keys(earlyTeamCompOptions).reduce(
-    (result: any[], property: any) => {
-      const teamComps = earlyTeamCompOptions[property];
-
-      const matchingComps = teamComps.filter((teamComp: any) => {
-        let unitList: any;
-        if (teamComp.unit_list) {
-          unitList = teamComp.unit_list.split("&");
-          const matchingUnits = unitList.filter((unit: string) =>
-            myUnitPool.includes(unit.slice(5))
-          );
-
-          const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
-          return uniqueMatchingUnits.length >= selectedLevel - 2; // Update the condition to check for 2 or more unique matching units
-        }
-      });
-
-      if (matchingComps.length > 0) {
-        return [...result, ...matchingComps];
-      }
-      return result;
-    },
-    []
+  const FilteredEarlyExtraOptions = getFilteredTeamComps(
+    earlyTeamCompOptions,
+    myUnitPool,
+    "unit_list",
+    2
   );
 
-  const FilteredLateOptions = Object.keys(lateTeamCompOptions).reduce(
-    (result: any[], property: any) => {
-      const teamComps = lateTeamCompOptions[property];
-      const matchingComps = teamComps.filter((teamComp: any) => {
-        let unitList;
-        if (teamComp.units_list) {
-          unitList = teamComp.units_list.split("&");
-          const matchingUnits = unitList.filter((unit: string) =>
-            myUnitPool.includes(unit.split("_")[1])
-          );
+  const FilteredLateOptions = getFilteredTeamComps(
+    lateTeamCompOptions,
+    myUnitPool,
+    "units_list",
+    selectedLevel - 3
+  );
 
-          const uniqueMatchingUnits = Array.from(new Set(matchingUnits)); // Remove duplicates from matching units
-          return uniqueMatchingUnits.length >= selectedLevel - 3; // Update the condition to check for 3 or more unique matching units
-        }
-      });
-
-      if (matchingComps.length > 0) {
-        return [...result, ...matchingComps];
-      }
-      return result;
-    },
-    []
+  const FilteredLateExtraOptions = getFilteredTeamComps(
+    lateTeamCompOptions,
+    myUnitPool,
+    "units_list",
+    3
   );
 
   return (
@@ -306,6 +227,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
             <TeamCompDisplay
               nonFilteredTeamComps={nonFilteredEarlyComps}
               filteredTeamComps={selectedFilteredEarlyComps}
+              filteredExtraTeamComps={selectedFilteredEarlyExtraComps}
               lowLevel={true}
               compLevel={selectedLevel}
               myUnitPool={myUnitPool}
@@ -314,6 +236,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
             <TeamCompDisplay
               nonFilteredTeamComps={nonFilteredLateComps}
               filteredTeamComps={selectedFilteredLateComps}
+              filteredExtraTeamComps={selectedFilteredLateExtraComps}
               lowLevel={false}
               compLevel={selectedLevel}
               myUnitPool={myUnitPool}

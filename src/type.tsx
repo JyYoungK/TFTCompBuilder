@@ -41,7 +41,7 @@ export type AugmentUnit = {
   avgPlace: number;
 };
 
-export type EarlyTeamComp = {
+export type TeamComp = {
   id: string;
   name: string;
   unit_list: any;
@@ -50,7 +50,7 @@ export type EarlyTeamComp = {
 };
 
 export type EarlyOptions = {
-  [key: number]: EarlyTeamComp[];
+  [key: number]: TeamComp[];
 };
 
 export const ItemTypes = {

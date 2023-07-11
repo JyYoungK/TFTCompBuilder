@@ -79,6 +79,10 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     return `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
   };
 
+  const championProfileImageEnlargedURL = (name: string) => {
+    return `https://www.mobafire.com/images/champion/card/${name.toLocaleLowerCase()}.jpg`;
+  };
+
   const myUnitCount = myUnitPool
     ? myUnitPool.filter((unit: string) => unit === name).length
     : 0;
@@ -118,9 +122,14 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
           />
           {displayType === "TeamCompDisplay" && !myUnitPool.includes(name) && (
             <img
-              src="/icons/FindIcon2.png"
+              src="/icons/FindIcon.png"
               className="absolute bottom-0.5 right-0.5 h-8 w-8 "
               alt="FindIcon2"
+              onClick={() => {
+                if (displayType === "TeamCompDisplay") {
+                  setModalVisible(true);
+                }
+              }}
             />
           )}
           {count && (
@@ -144,7 +153,7 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
       >
         <DisplayItems
           name={name}
-          championProfileImageURL={championProfileImageURL}
+          championProfileImageURL={championProfileImageEnlargedURL}
         />
       </Modal>
     </div>
