@@ -198,7 +198,6 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
     3
   );
 
-  console.log(matchedEarlyOptions);
   return (
     <div>
       <MyChampPool
