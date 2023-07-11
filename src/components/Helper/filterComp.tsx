@@ -33,8 +33,10 @@ export const renderFilteredComps = (
   lowLevel: boolean,
   compLevel: number,
   myUnitPool: any,
+  cardSelected: any,
   setCardSelected: React.Dispatch<React.SetStateAction<number>>
 ) => {
+  console.log(cardSelected);
   const mismatchCounts = getMismatchCounts(
     filterComps(comps, lowLevel),
     myUnitPool
