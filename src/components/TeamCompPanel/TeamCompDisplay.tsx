@@ -1,11 +1,7 @@
-import { useState, useEffect } from "react";
-import { season9ChampionList } from "../../season9/season9Comp";
-import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
+import { useState } from "react";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
-import { extraUnitList } from "../../season9/season9Comp";
-import { getWinRateColor } from "../Helper/HelperFunctions";
-import { filterComps, renderFilteredComps } from "../Helper/filterComp";
+import { renderFilteredComps } from "../Helper/filterComp";
 
 export interface Item {
   id: number;
