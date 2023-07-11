@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { extraUnitList } from "../../season9/season9Comp";
 import { season9ChampionList } from "../../season9/season9Comp";
 import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
@@ -24,7 +23,6 @@ const getMismatchCounts = (filteredComps: any, myUnitPool: any) => {
     const unitList = comp.unit_list
       .split("&")
       .map((unit: any) => unit.split("_")[1]);
-    console.log(unitList);
     let difference = unitList.filter((x: any) => !myUnitPool.includes(x));
     return difference.length;
   });
