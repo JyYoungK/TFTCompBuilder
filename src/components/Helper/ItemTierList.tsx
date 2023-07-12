@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Item, ItemCategory, ItemCategoryRow } from "../../type";
 import { formatString } from "./HelperFunctions";
-import { getImageUrl } from "./apiFetch";
+import { getImageUrl, getTopAugmentsDataURL, getAllItemURL } from "./apiFetch";
 
 interface Augment {
   augment: string;
@@ -17,13 +17,9 @@ function ItemTierList() {
   useEffect(() => {
     const fetchItemData = async () => {
       try {
-        const itemResponse = await fetch(
-          "https://api2.metatft.com/tft-comps-api/unit_items"
-        );
+        const itemResponse = await fetch(getAllItemURL());
         const itemData = await itemResponse.json();
-        const augmentResponse = await fetch(
-          "https://api2.metatft.com/tft-stat-api/augments_full?queue=1100&patch=current&days=2&rank=CHALLENGER,DIAMOND,GRANDMASTER,MASTER&permit_filter_adjustment=true"
-        );
+        const augmentResponse = await fetch(getTopAugmentsDataURL());
         const augmentData = await augmentResponse.json();
 
         const normalItems: Item[] = [];

@@ -2,7 +2,11 @@ import { season9ChampionList } from "../../season9/season9Comp";
 import { useState } from "react";
 import { getMaximumCardCount } from "../Helper/HelperFunctions";
 import { Modal } from "antd";
-import DisplayItems from "../Items/DisplayItems";
+import DisplayDetails from "../Items/DisplayDetails";
+import {
+  getChampionProfileImageEnlargedURL,
+  getChampionProfileImageURL,
+} from "../Helper/apiFetch";
 
 interface ChampionProfileDisplayProps {
   champion: any;
@@ -75,13 +79,6 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
   };
 
   const borderColorClass = getBorderColorClass(name, false);
-  const championProfileImageURL = (name: string) => {
-    return `https://cdn.metatft.com/file/metatft/champions/tft9_${name.toLowerCase()}.png`;
-  };
-
-  const championProfileImageEnlargedURL = (name: string) => {
-    return `https://www.mobafire.com/images/champion/card/${name.toLocaleLowerCase()}.jpg`;
-  };
 
   const myUnitCount = myUnitPool
     ? myUnitPool.filter((unit: string) => unit === name).length
@@ -101,12 +98,16 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
     <div key={name} className="relative">
       <div className="flex flex-row items-center">
         <div
-          className={`relative ${imageBlendModeClass} rounded-md border-[5px] ${borderColorClass} `}
+          className={`relative ${imageBlendModeClass} rounded-md border-[5px] ${borderColorClass} ${
+            displayType === "TeamCompDisplay"
+              ? "brighten-champ-profile-on-hover"
+              : ""
+          } `}
         >
           <img
             src={
               champion.name !== ""
-                ? championProfileImageURL(name)
+                ? getChampionProfileImageURL(name)
                 : "/icons/NoChampion.png"
             }
             alt={name}
@@ -130,6 +131,7 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
                   setModalVisible(true);
                 }
               }}
+              title={name}
             />
           )}
           {count && (
@@ -151,9 +153,9 @@ const ChampionProfileDisplay: React.FC<ChampionProfileDisplayProps> = ({
           backgroundColor: getBorderColorClass(name, true),
         }}
       >
-        <DisplayItems
+        <DisplayDetails
           name={name}
-          championProfileImageURL={championProfileImageEnlargedURL}
+          championProfileImageURL={getChampionProfileImageEnlargedURL}
         />
       </Modal>
     </div>

@@ -24,3 +24,7 @@ body,
 .blend-red img {
   filter: hue-rotate(0deg) saturate(300%) brightness(40%);
 }
+
+.brighten-champ-profile-on-hover:hover {
+  filter: brightness(150%);
+}

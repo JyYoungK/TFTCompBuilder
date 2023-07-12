@@ -1,7 +1,81 @@
 import { extraUnitList } from "../../season9/season9Comp";
-import { season9ChampionList } from "../../season9/season9Comp";
+import { season9ChampionList, season9Traits } from "../../season9/season9Comp";
 import ChampionProfileDisplay from "../UnitPanel/ChampionProfileDisplay";
 import { getWinRateColor } from "../Helper/HelperFunctions";
+import { getTraitsUrl } from "./apiFetch";
+
+const findTraitsByChampionNames = (championNames: string[]) => {
+  const traitsCount: Record<string, number> = {};
+
+  championNames.forEach((championName) => {
+    const champion = season9ChampionList.find(
+      (champion) => champion.name === championName
+    );
+    if (champion) {
+      champion.traits.forEach((trait) => {
+        traitsCount[trait] = (traitsCount[trait] || 0) + 1;
+      });
+    }
+  });
+
+  return traitsCount;
+};
+
+type SynergyRank = "bronze" | "silver" | "gold" | "plat";
+const rankOrder: SynergyRank[] = ["plat", "gold", "silver", "bronze"];
+
+function getActiveTraits(
+  traitsCount: Record<string, number>
+): Record<string, { count: number; rank: SynergyRank }> {
+  const activeTraits: Record<string, { count: number; rank: SynergyRank }> = {};
+
+  for (const trait of season9Traits) {
+    const traitCount = traitsCount[trait.name] || 0;
+    const reversedSynergies = [...trait.synergies].reverse();
+    const requiredSynergies = reversedSynergies.find(
+      (synergy) => traitCount >= synergy
+    );
+
+    if (requiredSynergies) {
+      const rank: SynergyRank =
+        reversedSynergies.indexOf(requiredSynergies) === 0
+          ? "plat"
+          : reversedSynergies.indexOf(requiredSynergies) === 1
+          ? "gold"
+          : reversedSynergies.indexOf(requiredSynergies) === 2
+          ? "silver"
+          : "bronze";
+
+      activeTraits[trait.name] = { count: requiredSynergies, rank };
+    }
+  }
+
+  // Sort activeTraits by rank and then by count
+  const sortedActiveTraits = Object.entries(activeTraits).sort(
+    ([, a], [, b]) => {
+      // Sort by rank
+      const rankComparison =
+        rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank);
+      if (rankComparison !== 0) {
+        return rankComparison;
+      }
+
+      // Sort by count in descending order
+      return b.count - a.count;
+    }
+  );
+
+  // Convert the sorted array back to an object
+  const sortedActiveTraitsObject: Record<
+    string,
+    { count: number; rank: SynergyRank }
+  > = {};
+  for (const [trait, data] of sortedActiveTraits) {
+    sortedActiveTraitsObject[trait] = data;
+  }
+
+  return sortedActiveTraitsObject;
+}
 
 const getMatchingComps = (
   teamCompOptions: any,
@@ -192,7 +266,7 @@ export const renderFilteredComps = (
       const secondMostPossibleComp = index === secondIndex;
       const thirdMostPossibleComp = index === thirdIndex;
 
-      let bestTeamCompBGColorClass = "";
+      let bestTeamCompBGColorClass = "bg-green-300 border-2 border-green-600";
       if (mostPossibleComp) {
         bestTeamCompBGColorClass = "bg-fuchsia-300 border-2 border-fuchsia-600";
       } else if (secondMostPossibleComp) {
@@ -210,11 +284,15 @@ export const renderFilteredComps = (
         bestTeamCompTextColorClass = "text-cyan-600";
       }
 
+      const traitsCount = findTraitsByChampionNames(filteredChampionNames);
+      const activeTraits = getActiveTraits(traitsCount);
+      console.log(activeTraits);
+
       return (
         filteredChampionNames.length === compLevel && (
           <div
             key={index}
-            className={`grid grid-cols-12 rounded-3xl ${bestTeamCompBGColorClass}`}
+            className={`grid h-40 grid-cols-12 items-center rounded-3xl ${bestTeamCompBGColorClass} my-1`}
             onClick={() => setCardSelected(index)}
           >
             <div
@@ -235,21 +313,50 @@ export const renderFilteredComps = (
                 </div>
               </div>
             </div>
-            <div className="col-span-10 flex flex-row space-x-1">
-              {filteredChampionNames.map(
-                (championName: string, subIndex: number) => (
-                  <div className="my-2" key={`${index}-${subIndex}`}>
-                    <ChampionProfileDisplay
-                      champion={{ name: championName }}
-                      count={false}
-                      myUnitPool={myUnitPool}
-                      setMyUnitPool={null}
-                      enemyUnitPool={null}
-                      displayType="TeamCompDisplay"
+            <div className="col-span-10 flex flex-col space-x-1">
+              <div className="grid grid-cols-4">
+                {Object.entries(activeTraits).map(([trait, data]) => (
+                  <div
+                    key={trait}
+                    className="relative flex flex-row items-center"
+                  >
+                    <img
+                      src={getTraitsUrl(trait)}
+                      alt={trait}
+                      className="mr-0.5 h-8 w-8 p-2"
+                      style={{
+                        filter: "brightness(0%) saturate(0%)",
+                        zIndex: 1,
+                      }}
                     />
+                    <img
+                      src={getTraitsUrl(data.rank)}
+                      alt={data.rank}
+                      className="absolute left-0 top-0 h-8 w-8"
+                    />
+                    <div className="text-md flex items-center font-bold">
+                      {data.count}
+                    </div>
+                    <div className="ml-1 text-sm">{trait}</div>
                   </div>
-                )
-              )}
+                ))}
+              </div>
+              <div className="flex flex-row space-x-1">
+                {filteredChampionNames.map(
+                  (championName: string, subIndex: number) => (
+                    <div className="my-2" key={`${index}-${subIndex}`}>
+                      <ChampionProfileDisplay
+                        champion={{ name: championName }}
+                        count={false}
+                        myUnitPool={myUnitPool}
+                        setMyUnitPool={null}
+                        enemyUnitPool={null}
+                        displayType="TeamCompDisplay"
+                      />
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </div>
         )

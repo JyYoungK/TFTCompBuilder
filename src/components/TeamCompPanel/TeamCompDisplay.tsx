@@ -63,7 +63,7 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
       </div>
       {activeKey === "1" ? (
         // Page 1 content
-        filteredTeamComps.length > 0 ? (
+        filteredTeamComps.length > 0 || filteredExtraTeamComps.length > 0 ? (
           renderFilteredComps(
             filteredTeamComps,
             filteredExtraTeamComps,
@@ -77,12 +77,24 @@ const TeamCompDisplay: React.FC<TeamCompDisplayProps> = ({
           <div className="text-md grid grid-cols-12 py-2 font-bold 2xl:text-xl">
             <div className="col-span-2">?</div>
             <div className="col-span-10 flex flex-col ">
-              <div className="text-start">
-                Sorry, either no data is available or
-              </div>
-              <div className="text-start">
-                You must select more champions to your pool
-              </div>
+              {myUnitPool < compLevel - 2 ? (
+                <div className="text-start">
+                  {lowLevel ? (
+                    <div>
+                      You must select at least 3 more champions to add to your
+                      pool
+                    </div>
+                  ) : (
+                    <div>
+                      You must select at least
+                      {compLevel - myUnitPool.length - 2} more champions to add
+                      to your pool
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-start">Sorry, no data is available</div>
+              )}
             </div>
           </div>
         )

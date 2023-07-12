@@ -52,7 +52,7 @@ const MyChampPool: React.FC<MyChampPoolProps> = ({
             : "? %"}
         </div>
         <div className="col-span-10 flex flex-row space-x-1">
-          {[...Array(10)]
+          {[...Array(9)]
             .map((_, index) => {
               const championName = myUnitPool[index] || "";
               return championName;

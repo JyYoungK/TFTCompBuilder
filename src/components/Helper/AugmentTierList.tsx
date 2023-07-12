@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AugmentData, AugmentUnit } from "../../type";
+import { getChampionItemDataURL, getAugmentsDataUrl } from "./apiFetch";
 
 function AugmentTierList() {
   const [augmentUnits, setAugmentUnits] = useState<AugmentData[]>([]);
@@ -7,9 +8,7 @@ function AugmentTierList() {
   useEffect(() => {
     const fetchAugmentUnits = async () => {
       try {
-        const response = await fetch(
-          "https://api2.metatft.com/tft-stat-api/augment_units"
-        );
+        const response = await fetch(getAugmentsDataUrl());
         const responseData: { results: AugmentData[] } = await response.json();
         const data: AugmentData[] = responseData.results.slice(0, 400);
         setAugmentUnits(data);
@@ -53,10 +52,6 @@ function AugmentTierList() {
 
   const topAugments = getTopAugments(augmentUnits);
 
-  const getImageUrl = (itemName: string) => {
-    return `https://cdn.metatft.com/file/metatft/champions/${itemName.toLowerCase()}.png`;
-  };
-
   function transformAugmentName(augment: string): string {
     // Remove 'TFT9_' from the beginning
     let transformedName = augment.replace("TFT9_Augment_", "");
@@ -90,7 +85,7 @@ function AugmentTierList() {
                   {augment.units.slice(0, 9).map((championUrl) => (
                     <img
                       key={championUrl}
-                      src={getImageUrl(championUrl)}
+                      src={getChampionItemDataURL(championUrl)}
                       className="h-12 w-12"
                     />
                   ))}

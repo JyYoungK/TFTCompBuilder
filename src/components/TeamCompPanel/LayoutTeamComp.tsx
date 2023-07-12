@@ -209,7 +209,7 @@ const LayoutTeamComp: React.FC<LayoutTeamCompProps> = ({
       <div className="grid grid-cols-12 items-center font-bold">
         <div className="col-span-2 flex"></div>
         <div className="col-span-10 flex justify-start space-x-2 ">
-          {[5, 6, 7, 8, 9, 10].map((level: number) => (
+          {[5, 6, 7, 8, 9].map((level: number) => (
             <button
               key={level}
               className={`rounded-xl border-2 border-green-500 px-4 py-2 hover:bg-emerald-500 ${
