@@ -266,7 +266,7 @@ export const renderFilteredComps = (
       const secondMostPossibleComp = index === secondIndex;
       const thirdMostPossibleComp = index === thirdIndex;
 
-      let bestTeamCompBGColorClass = "bg-green-300 border-2 border-green-600";
+      let bestTeamCompBGColorClass = "border-2 border-green-600";
       if (mostPossibleComp) {
         bestTeamCompBGColorClass = "bg-fuchsia-300 border-2 border-fuchsia-600";
       } else if (secondMostPossibleComp) {
