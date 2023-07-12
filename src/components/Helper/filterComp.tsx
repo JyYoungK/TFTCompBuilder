@@ -337,7 +337,7 @@ export const renderFilteredComps = (
                     <div className="text-md flex items-center font-bold">
                       {data.count}
                     </div>
-                    <div className="ml-1 text-sm">{trait}</div>
+                    <div className="text-md ml-1 font-bold">{trait}</div>
                   </div>
                 ))}
               </div>
